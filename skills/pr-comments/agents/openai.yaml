@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Comments"
+  short_description: "Write clear, attributed GitHub comments"
+  default_prompt: "Use $pr-comments when posting this comment on my behalf."

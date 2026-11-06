@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Loop"
+  short_description: "Review with other models until a stop condition is met"
+  default_prompt: "Use $review-loop to review this change with GPT Sol 6.1 until it approves."

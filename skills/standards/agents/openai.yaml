@@ -1,0 +1,4 @@
+interface:
+  display_name: "Standards"
+  short_description: "Write, simplify, and review code against my standards"
+  default_prompt: "Use $standards to review my diff and simplify it."
