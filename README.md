@@ -4,6 +4,9 @@ My agent skills for Claude Code and Codex. Several are adapted from
 [tstack](https://github.com/t3dotgg/tstack) by Theo Browne (MIT). `standards`
 borrows its coupling and special-case rules from caldoai's
 [untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) (MIT).
+Some rules in `standards` and `design` are ideas from Fernando Rojo's
+[nando-skill](https://github.com/nandorojo/nando-skill), rewritten in my own
+words.
 
 | Skill | Say | What it does |
 |---|---|---|
@@ -22,12 +25,16 @@ Default reviewers: GPT Sol 6.1. Council: Claude Opus 5.5 and GPT Sol 6.1.
 
 ## Guides
 
-`skills/standards/guides` and `skills/design/guides` hold copies of other
-people's skills, renamed from `SKILL.md` to `GUIDE.md` so they install only as
-part of their parent skill:
+Guides are workflows that install only as part of their parent skill, so
+they don't show up as skills of their own.
 
-- `tdd` and `diagnosing-bugs` (in `standards`) from
-  [mattpocock/skills](https://github.com/mattpocock/skills) (MIT)
+`skills/standards/guides` holds `tdd` and `diagnosing-bugs`, rewritten from
+[mattpocock/skills](https://github.com/mattpocock/skills) (MIT). They are
+edited here and not synced.
+
+`skills/design/guides` holds unedited copies of other people's skills, renamed
+from `SKILL.md` to `GUIDE.md`:
+
 - `frontend-design` (in `design`) from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0)
 - `emil-design-eng`, `animate`, `animate-expo`, `review-animations`,
   `improve-animations`, `find-animation-opportunities`, and `break-ui` (in
@@ -35,7 +42,8 @@ part of their parent skill:
   Emil Kowalski's [skill](https://github.com/emilkowalski/skill) and
   [skills](https://github.com/emilkowalski/skills) repos (MIT)
 
-Each guide keeps its upstream license. To refresh them from upstream:
+Each guide keeps its upstream license. To refresh the design guides from
+upstream:
 
 ```bash
 ./scripts/sync-guides.sh

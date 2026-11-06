@@ -1,59 +1,45 @@
-# When to Mock
+# When to mock
 
-Mock at **system boundaries** only:
+Mock only at the edges of your system:
 
-- External APIs (payment, email, etc.)
-- Databases (sometimes - prefer test DB)
-- Time/randomness
-- File system (sometimes)
+- third-party APIs (payments, email);
+- time and randomness;
+- the database or file system, only when you can't run a real one.
 
-Don't mock:
+Never mock your own modules. If you control it, run it.
 
-- Your own classes/modules
-- Internal collaborators
-- Anything you control
+## Make the edges easy to mock
 
-## Designing for Mockability
-
-At system boundaries, design interfaces that are easy to mock:
-
-**1. Use dependency injection**
-
-Pass external dependencies in rather than creating them internally:
+**Pass dependencies in** instead of creating them inside:
 
 ```typescript
-// Easy to mock
+// Easy to test: the caller supplies the client
 function processPayment(order, paymentClient) {
   return paymentClient.charge(order.total);
 }
 
-// Hard to mock
+// Hard to test: the client is built inside
 function processPayment(order) {
   const client = new StripeClient(process.env.STRIPE_KEY);
   return client.charge(order.total);
 }
 ```
 
-**2. Prefer SDK-style interfaces over generic fetchers**
-
-Create specific functions for each external operation instead of one generic function with conditional logic:
+**Give each external call its own function** instead of one generic fetcher:
 
 ```typescript
-// GOOD: Each function is independently mockable
+// Good: each call can be mocked with one fixed response
 const api = {
   getUser: (id) => fetch(`/users/${id}`),
   getOrders: (userId) => fetch(`/users/${userId}/orders`),
-  createOrder: (data) => fetch('/orders', { method: 'POST', body: data }),
+  createOrder: (data) => fetch("/orders", { method: "POST", body: data }),
 };
 
-// BAD: Mocking requires conditional logic inside the mock
+// Bad: the mock has to branch on the URL to know what to return
 const api = {
   fetch: (endpoint, options) => fetch(endpoint, options),
 };
 ```
 
-The SDK approach means:
-- Each mock returns one specific shape
-- No conditional logic in test setup
-- Easier to see which endpoints a test exercises
-- Type safety per endpoint
+With one function per call, each mock returns one shape, the test shows which
+calls it uses, and each call keeps its own types.

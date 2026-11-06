@@ -1,33 +1,17 @@
-# Good and Bad Tests
+# Good and bad tests
 
-## Good Tests
-
-**Integration-style**: Test through real interfaces, not mocks of internal parts.
+## Test behavior through the public interface
 
 ```typescript
-// GOOD: Tests observable behavior
-test("user can checkout with valid cart", async () => {
+// Good: checks what the caller cares about
+test("user can check out with a valid cart", async () => {
   const cart = createCart();
   cart.add(product);
   const result = await checkout(cart, paymentMethod);
   expect(result.status).toBe("confirmed");
 });
-```
 
-Characteristics:
-
-- Tests behavior users/callers care about
-- Uses public API only
-- Survives internal refactors
-- Describes WHAT, not HOW
-- One logical assertion per test
-
-## Bad Tests
-
-**Implementation-detail tests**: Coupled to internal structure.
-
-```typescript
-// BAD: Tests implementation details
+// Bad: checks how checkout works inside
 test("checkout calls paymentService.process", async () => {
   const mockPayment = jest.mock(paymentService);
   await checkout(cart, payment);
@@ -35,42 +19,39 @@ test("checkout calls paymentService.process", async () => {
 });
 ```
 
-Red flags:
+A good test uses only the public API, survives a refactor, and is named for
+what the code does, not how. Warning signs: mocks of your own modules, tests of
+private functions, assertions on call counts or call order.
 
-- Mocking internal collaborators
-- Testing private methods
-- Asserting on call counts/order
-- Test breaks when refactoring without behavior change
-- Test name describes HOW not WHAT
-- Verifying through external means instead of interface
+## Verify through the interface, not around it
 
 ```typescript
-// BAD: Bypasses interface to verify
+// Bad: reaches past the interface into the database
 test("createUser saves to database", async () => {
   await createUser({ name: "Alice" });
   const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
   expect(row).toBeDefined();
 });
 
-// GOOD: Verifies through interface
-test("createUser makes user retrievable", async () => {
+// Good: proves the user can be read back the way callers read it
+test("createUser makes the user retrievable", async () => {
   const user = await createUser({ name: "Alice" });
   const retrieved = await getUser(user.id);
   expect(retrieved.name).toBe("Alice");
 });
 ```
 
-**Tautological tests**: Expected value restates the implementation, so the test passes by construction.
+## Use expected values you know independently
 
 ```typescript
-// BAD: Expected value is recomputed the way the code computes it
+// Bad: computes the expected value the same way the code does
 test("calculateTotal sums line items", () => {
   const items = [{ price: 10 }, { price: 5 }];
   const expected = items.reduce((sum, i) => sum + i.price, 0);
   expect(calculateTotal(items)).toBe(expected);
 });
 
-// GOOD: Expected value is an independent, known literal
+// Good: a literal you checked by hand
 test("calculateTotal sums line items", () => {
   expect(calculateTotal([{ price: 10 }, { price: 5 }])).toBe(15);
 });

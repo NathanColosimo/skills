@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Refresh the vendored guides in skills/<skill>/guides from their upstream repos.
+# The standards guides (tdd, diagnosing-bugs) were rewritten here, so they are
+# not synced; refreshing them would undo those edits.
 # Each upstream SKILL.md is renamed GUIDE.md so agents and `npx skills` don't
 # treat the guides as separate skills. Only the parent skill is installed.
 set -euo pipefail
@@ -10,8 +12,6 @@ trap 'rm -rf "$tmp"' EXIT
 
 # "<skill> <repo> <path in repo> <guide name>"
 sources=(
-  "standards mattpocock/skills skills/engineering/tdd tdd"
-  "standards mattpocock/skills skills/engineering/diagnosing-bugs diagnosing-bugs"
   "design anthropics/skills skills/frontend-design frontend-design"
   "design emilkowalski/skill skills/emil-design-eng emil-design-eng"
   "design emilkowalski/skills skills/animate animate"

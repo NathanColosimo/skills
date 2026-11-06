@@ -22,6 +22,34 @@ guides were written as separate skills:
 The project's own design system, tokens, and components come first. A guide
 shapes how you use them. It doesn't replace them.
 
+## Rules for every screen
+
+These apply whichever guide you use.
+
+- **Every element earns its space.** Each heading, button, status line, and
+  border must help the user understand or do something. Remove headings that
+  repeat what's obvious, status text that says nothing new ("Viewing
+  computer"), and containers that only mark where one component ends.
+- **One control per intent.** If two buttons do the same thing, merge them,
+  or make the difference clear in the user's words.
+- **Keep secondary actions out of the way.** Admin and lifecycle actions (stop,
+  delete, reset) go somewhere deliberate, not permanently on the main screen.
+  Don't hide a truly essential action just to cut the button count.
+- **Review the whole screen,** not each component alone. A page header, a
+  toolbar, and an embedded viewer's toolbar are one experience.
+- **Loading looks like the loaded layout.** The pending state uses the same
+  frame, alignment, and markers as the content, so nothing jumps when data
+  arrives. Don't show fake data or enabled actions before it does.
+- **Keep content on screen during a refresh,** including after a refresh
+  fails. Show the error next to it.
+- **Progress shows on the trigger.** The button that started an action shows
+  its progress ("Save" → "Saving…") and keeps its size. Don't add a separate
+  "Saving…" row.
+- **Errors appear next to what failed** and stay until resolved. Use a toast
+  only when there's no better place.
+- **Test the transitions,** not just the final screenshot: loading to content,
+  error to retry to success, on desktop and narrow screens, with long text.
+
 ## Which guide
 
 | Task | Guide |

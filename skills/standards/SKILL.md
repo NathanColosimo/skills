@@ -27,16 +27,14 @@ code. Note it as a follow-up instead.
 ## Guides
 
 Two workflows have their own guides in this skill's folder. Read the guide in
-full before you start, along with the files it mentions next to it:
+full before you start:
 
 | Task | Guide |
 | --- | --- |
-| Build a feature or fix a bug test-first; red-green-refactor | `guides/tdd/GUIDE.md` |
+| Build a feature or fix a bug test-first | `guides/tdd/GUIDE.md` |
 | Diagnose a hard bug, a failure, or a performance regression | `guides/diagnosing-bugs/GUIDE.md` |
 
-The guides were written as separate skills. When one mentions "SKILL.md", it
-means its own `GUIDE.md`. When one sends refactoring to a review skill, use
-the simplify pass here. These rules still apply inside a guide's workflow.
+These rules still apply inside a guide's workflow.
 
 ## 1. Keep the change small
 
@@ -117,6 +115,11 @@ follow-up.
   cases up front with early returns. The rest of the code should see one shape
   and run one path. Do not carry optional or loosely typed values deep into the
   code and branch on them there.
+- **No mode arguments.** Don't add a boolean, enum, or `kind` option whose job
+  is to pick between different code paths, like
+  `attach({ kind: "terminal" | "computer" })`. Write two explicit functions or
+  components that share the common parts. Ordinary data arguments (an ID, a
+  limit, `disabled`) are fine.
 - **Fewer layers.** A module with one caller and no concept of its own belongs
   in that caller. Do not add an abstraction until a second real use exists.
 - **Keep abstractions that name a real concept.** Folding code in is right when
@@ -125,12 +128,28 @@ follow-up.
 - **One way to do a thing.** Do not add a second path next to an existing one.
   Extend or replace the existing one.
 
-## 6. Types
+## 6. State
+
+- **Add as little state as possible.** Before adding a state variable or store
+  field, name the independent fact it holds. If you can compute the value from
+  data you already have, compute it where you need it.
+- **Store IDs, not copies.** Keep `selectedUserId`, then look the user up in
+  the data you already fetched. A copied object goes stale.
+- **Don't mirror server data.** Fetched data lives in its fetch cache. Do not
+  copy it into a store, a context, or local state.
+- **Forms hold only the user's edits.** Show the fetched value until the user
+  changes a field. Don't initialize form state from the fetched object: a
+  refetch then either overwrites the user's edits or never shows up.
+
+## 7. Types
 
 The type system should make invalid states fail to compile.
 
 - **Discriminated unions over flag bags.** `{ status: "error"; error: E }`, not
   `{ loading?: boolean; error?: E; data?: T }`.
+- **Exhaustive switches.** Switch on a union with no `default` case, and end
+  with `value satisfies never`, so adding a variant fails to compile until
+  every switch handles it.
 - **Brand primitives** that can be mixed up (IDs, emails, money). Validate once
   at the boundary. Downstream code trusts the type. Use the project's library
   primitives for this when it has them.
@@ -145,12 +164,66 @@ The type system should make invalid states fail to compile.
   make that mapping exhaustive so a new error fails to compile. Wrap code that
   can throw so its failure gets a type. Only real bugs should stay untyped
   defects.
+- **Identify errors by a stable code** (a `_tag` or `code`), never by matching
+  message text. Don't collapse typed errors into one "Something went wrong";
+  the user needs to know what failed and what to do.
 - **No escape hatches** (`any`, `as`, `!`, `@ts-ignore`) without a comment that
   says why the type system can't express it.
 - **Pass an object** instead of several positional arguments of the same type,
   except on hot paths.
 
-## 7. Clarity
+## 8. APIs and data flow
+
+- **Put logic on the server when it can run there.** Shape an endpoint around
+  what the screen needs. If the client must wait for one response to make the
+  next request (fetch the user, then fetch their teams), add one endpoint that
+  returns both.
+- **Reads have no side effects.** A query can be retried, refetched on focus,
+  or run twice by two components. It must never start work or change state.
+  Anything that changes state is a mutation, even if it's idempotent.
+- **One outcome, one write.** Dependent writes for a single user action belong
+  in one server operation, with a transaction or explicit partial-failure
+  handling. Don't make the client run a create, check, start sequence.
+- **Return explicit shapes.** Don't return database rows directly; pick the
+  fields so private ones can't leak. Check authorization in the service, not
+  the client.
+- **Create request IDs on submit,** not while the user is editing. A retry
+  reuses the same ID so the server can deduplicate it.
+
+## 9. Configuration
+
+- **Parse config once.** Each runtime has one typed entry point that reads and
+  validates the environment at startup. Everything else imports the parsed
+  result. No `process.env` reads scattered through the code.
+- **Required secrets have no fallback.** A missing secret fails at startup.
+  Defaults are only for optional values.
+- **Keep server secrets and browser config in separate entry points,** so a
+  secret can't end up in a client bundle.
+- **No inline URLs or paths.** Define each origin, base path, and endpoint once
+  as a named constant or config value, and derive related ones from it.
+
+## 10. React and UI code
+
+- **Don't manage promise state by hand.** No `setLoading(true)`, `await`,
+  `setError()` sequences, in a component or a custom hook. Use the query
+  library (`useQuery`, `useMutation`) or `useTransition`, and read their state
+  directly.
+- **Effects are a last resort.** Compute values during render, handle user
+  actions in event handlers, and fetch with the query library. Use an effect
+  only to sync with something outside React, and clean it up.
+- **Check for data before checking status.** If data exists, show it, even
+  while refetching or after a refresh fails. Show the refresh error next to
+  the content. Show a skeleton only on the first load, when there is no data.
+- **Empty is not loading.** An empty list is a successful result and gets the
+  empty state. A query that hasn't started (missing input, disabled) isn't
+  loading either, so don't show a spinner that never ends.
+- **No mode booleans that choose whole trees** (`isNewChat`, `isNative`).
+  Compose explicit trees from shared parts. Booleans that describe state
+  (`disabled`, `selected`) are fine.
+- **Don't touch browser globals** (`window`, `localStorage`) at module load or
+  during a server render.
+
+## 11. Clarity
 
 - Reduce nesting. Prefer early returns to `else` chains.
 - No nested ternaries. Use `if`/`else` or `switch` for more than two cases.
@@ -169,7 +242,7 @@ Comments:
 - **A comment explaining a workaround** goes away when the problem behind the
   workaround does.
 
-## 8. Tests and proof
+## 12. Tests and proof
 
 A test should fail when behavior regresses, and only then.
 
@@ -182,24 +255,30 @@ A test should fail when behavior regresses, and only then.
 - **Use real dependencies when you can run them:** a real database, a local
   emulator, the real runtime. Mock only third-party services that have no test
   environment.
+- **No sleeps in tests.** Wait for a condition, or control the clock. To test a
+  loading or error state, hold the request open and release it when the test
+  is ready.
 - **For a bug fix,** add one focused test that fails without the fix, when the
   repo has a test setup and nothing covers the behavior.
 - **Prove what you claim.** "It works" means you saw it work in this session:
   command output, a reproduction, a screenshot. Green mocked tests do not
-  prove a user-facing flow.
+  prove a user-facing flow. A tool listed in `package.json` doesn't prove it
+  ran; check its output.
 
-## 9. Observability and performance
+## 13. Observability and performance
 
 - Instrument with structured spans or one wide event per unit of work, not
   scattered print logs. Keep the cause on every error you wrap.
 - A performance claim needs the mechanism and the size of the effect, measured.
   "This should be faster" is not a reason to add complexity.
 
-## 10. Turn repeats into checks
+## 14. Checks
 
-If a finding is mechanical, propose a lint rule, a type test, or a CI check
-that would catch it next time. Rules that a machine can enforce should not
-depend on someone remembering them.
+- **Don't silence a check to make it pass.** Don't disable a lint rule, skip a
+  test, raise a threshold, or add a cast to get a green run. Fix the cause. If
+  you must suppress something, scope it to one line and say why.
+- **Turn repeats into checks.** If a finding is mechanical, propose a lint rule,
+  a type test, or a CI check that would catch it next time.
 
 ## Review output
 
