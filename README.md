@@ -66,14 +66,14 @@ Edit this repo, not the installed copies. An update overwrites those.
 
 ## Attribution
 
-| Used in | Source | Author | License | How it's used |
-| --- | --- | --- | --- | --- |
-| `full-send`, `full-stop`, `modernize`, `takeover`, `babysit-pr` | [tstack](https://github.com/t3dotgg/tstack) | Theo Browne | MIT | Adapted |
-| `standards` | [untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) | caldoai | MIT | Coupling and special-case rules |
-| `standards` (`tdd`, `diagnosing-bugs` guides) | [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | Edited copies |
-| `standards` | [no-use-effect](https://github.com/factory-ai/factory-plugins/tree/master/plugins/typescript/skills/no-use-effect) | Factory | None stated | Ideas, rewritten |
-| `standards`, `design` | [nando-skill](https://github.com/nandorojo/nando-skill) | Fernando Rojo | None stated | Ideas, rewritten |
-| `design` (`frontend-design` guide) | [anthropics/skills](https://github.com/anthropics/skills) | Anthropic | Apache-2.0 | Edited copy |
-| `design` (`emil-design-eng`, `animate`, `animate-expo`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `break-ui` guides) | [skill](https://github.com/emilkowalski/skill), [skills](https://github.com/emilkowalski/skills) | Emil Kowalski | MIT | Edited copies |
-| `design` (landing pages) | [taste-skill](https://github.com/leonxlnx/taste-skill) | leonxlnx | MIT | Fetched on demand |
-| `pr-writing` | [What My Pull Requests Look Like Now](https://hugorcd.com/writing/what-my-pull-requests-look-like-now) and his `pr-writing` skill | Hugo Richard | None stated | Ideas, rewritten |
+| Used in | Source | Author |
+| --- | --- | --- |
+| `full-send`, `full-stop`, `modernize`, `takeover`, `babysit-pr` | [tstack](https://github.com/t3dotgg/tstack) | Theo Browne |
+| `standards` | [untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) | caldoai |
+| `standards` (`tdd`, `diagnosing-bugs` guides) | [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock |
+| `standards` | [no-use-effect](https://github.com/factory-ai/factory-plugins/tree/master/plugins/typescript/skills/no-use-effect) | Factory |
+| `standards`, `design` | [nando-skill](https://github.com/nandorojo/nando-skill) | Fernando Rojo |
+| `design` (`frontend-design` guide) | [anthropics/skills](https://github.com/anthropics/skills) | Anthropic |
+| `design` (`emil-design-eng`, `animate`, `animate-expo`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `break-ui` guides) | [skill](https://github.com/emilkowalski/skill), [skills](https://github.com/emilkowalski/skills) | Emil Kowalski |
+| `design` (landing pages) | [taste-skill](https://github.com/leonxlnx/taste-skill) | leonxlnx |
+| `pr-writing` | [What My Pull Requests Look Like Now](https://hugorcd.com/writing/what-my-pull-requests-look-like-now) and his `pr-writing` skill | Hugo Richard |
