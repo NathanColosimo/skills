@@ -89,7 +89,7 @@ wait for it and never hold a merge for it.
 If a review bot leaves feedback you believe is not worth addressing, reply with
 a written reason and resolve the comment. Decline findings that would break
 the `standards` skill, such as adding a shim or a branch for a case that
-can't happen, and cite the rule. Use the `pr-comments` skill
+can't happen, and cite the rule. Use the `pr-writing` skill
 for every comment posted on the user's behalf.
 
 Screenshots and videos help as well, when you have a way to upload them.

@@ -34,9 +34,9 @@ Independently verify the original failure and realistic workflows, following
 repository guidance and permissions. Green mocked tests do not prove the user
 experience works. State what remains unverified.
 
-When the requested finish includes a PR, use `file-pr` to file or update it,
-then `babysit-pr` rather than stopping at creation. Use `pr-comments`
-for replies. Merge or close the original PR only when authorized.
+When the requested finish includes a PR, use `pr-writing` to file or update it,
+then `babysit-pr` rather than stopping at creation. Use it
+for replies too. Merge or close the original PR only when authorized.
 
 Report what you inherited, what you changed, how you verified it, how credit
 was preserved, and any remaining decision.

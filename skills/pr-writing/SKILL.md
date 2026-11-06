@@ -1,9 +1,12 @@
 ---
-name: file-pr
-description: File or update a pull request whose description shows the change works, not only says so. Use when the user asks to file, open, create, or update a PR or its description, or to prepare a change for review.
+name: pr-writing
+description: Write and post anything on a pull request for the user, including the title, the description, comments, review comments, and replies. Use when the user asks to file, open, create, or update a PR or its description, to prepare a change for review, or whenever you post a GitHub comment for them.
 ---
 
-# File PR
+# PR writing
+
+This covers everything you write on a PR: the title, the description, and
+comments. Read "Public repos" before writing anything in a public repo.
 
 A reviewer spends most of their time recreating what the author already saw:
 the page, the command, the output. Put that in the description. A sentence
@@ -12,6 +15,37 @@ width, before and after, is evidence.
 
 When the user asks you to file or update the PR, that is the go-ahead. If they
 only asked for a draft, show it to them before posting.
+
+## Public repos
+
+Some public repos are one part of a product that also has private code: a
+hosted backend, an internal service, a private repo it talks to. Everything
+you post in a public repo is visible to anyone, forever, so write only what
+someone reading the public code could already know.
+
+Check first with `gh repo view --json visibility -q .visibility`. If it says
+`PUBLIC` and the work involved anything private (another repo, internal
+docs, a private ticket, a conversation), check every title, description,
+comment, commit message, and branch name for:
+
+- names of private repos, services, files, functions, or config;
+- internal URLs, hostnames, dashboards, log or trace links, and ticket or
+  chat links;
+- how the private side works inside: its architecture, its data model, its
+  limits, or why it behaves the way it does;
+- customers, incidents, internal metrics, costs, and plans that haven't been
+  announced;
+- captures, logs, or command output that show any of the above.
+
+Describe the private side only by its public contract: the documented API,
+the protocol, or behavior a user can see. "The server can now return
+`409` when two writes race" is fine. Explaining which internal service
+returns it, and why, is not.
+
+If the real reason for a change lives in private code, give the reason as
+seen from the public side, or keep the description short. If you can't
+explain the change without private details, ask the user before posting.
+Treat this like a secret: it can't be taken back once it's posted.
 
 ## Before filing
 
@@ -151,7 +185,7 @@ prompt next to its output.
 ## Filing
 
 - Check the title, description, and attachments for secrets and private
-  details.
+  details, and in a public repo, for anything "Public repos" lists.
 - Before posting, check that the first line matches what the user did, that
   every claim has evidence or says why there's none, and that "In short" makes
   sense on its own.
@@ -159,5 +193,56 @@ prompt next to its output.
 - If `gh pr create` fails because the GraphQL rate limit is used up, use REST:
   `gh api repos/<owner>/<repo>/pulls -f title=... -f head=... -f base=... -F body=@<file>`.
 - If the user also asked you to babysit it, continue with `babysit-pr`.
-- Don't post a follow-up comment unless the user's request needs one. For
-  comments, use `pr-comments`.
+- Don't post a follow-up comment unless the user's request needs one.
+
+## Comments
+
+### Attribution
+
+Start every comment you post on the user's behalf with this note:
+
+```md
+> [!NOTE]
+> 🤖 **<model> responding on behalf of <user>**
+
+The comment starts here.
+```
+
+Use the public model name the harness reports and the user's name or GitHub
+login. If the model name isn't available, use the harness name. Do not guess.
+Add no other heading, signature, or rule.
+
+This applies to top-level comments, inline review comments, replies to bots
+and reviewers, and the explanation you leave before resolving a thread. It
+does not apply to PR descriptions (they use the first line above), commit
+messages, or text the user asked you to post exactly as written.
+
+### Writing a comment
+
+- Lead with the conclusion in one sentence.
+- Then the evidence: the code (`file:line` or a permalink), the check, the
+  output, or the reproduction. Pick it the way "Evidence" says: real output,
+  a before-and-after capture, a measured number. Never retype or tidy output.
+- Keep it short. No thanks, no filler, no status narration.
+- Separate what you verified from what you judge, and say in one sentence what
+  you didn't check.
+- Use a list or a short code block when it reads more easily than prose.
+
+Common shapes:
+
+- **Fixed:** "Fixed in `<sha>`: <what changed>." Add one line of why if it
+  isn't obvious.
+- **Declined:** "Not changing this: <reason>." Cite the code or the rule.
+  Offer a follow-up only if one is real.
+- **Question:** the question first, then what you checked and the options,
+  with your recommendation.
+- **Review finding:** what is wrong, where, why it matters, and the smallest
+  fix.
+
+### Posting a comment
+
+1. Check the whole comment, including quotes and attachments, for secrets and
+   private details, and in a public repo, for anything "Public repos" lists.
+2. Preview the Markdown so quotes and blank lines render as intended.
+3. After posting, confirm GitHub returned the comment or review URL.
+4. Resolve a thread only after your reply posted.

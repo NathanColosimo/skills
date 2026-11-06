@@ -52,7 +52,7 @@ one appears.
    checks, and redo proof for any behavior the pass touched.
 4. **Get review** with the `review-loop` skill, using its default reviewers
    unless the user named others.
-5. **File the PR** with the `file-pr` skill. Its Evidence section shows your
+5. **File the PR** with the `pr-writing` skill. Its Evidence section shows your
    proof.
 6. **Babysit the PR** with the `babysit-pr` skill. Fix real findings and CI
    failures. Get proof for each fix before you push it.

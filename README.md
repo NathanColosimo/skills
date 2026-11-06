@@ -6,7 +6,7 @@ borrows its coupling and special-case rules from caldoai's
 [untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) (MIT).
 Some rules in `standards` and `design` are ideas from Fernando Rojo's
 [nando-skill](https://github.com/nandorojo/nando-skill), rewritten in my own
-words. `file-pr` is built on Hugo Richard's
+words. `pr-writing` is built on Hugo Richard's
 [What My Pull Requests Look Like Now](https://hugorcd.com/writing/what-my-pull-requests-look-like-now)
 and his `pr-writing` skill.
 
@@ -17,8 +17,7 @@ and his `pr-writing` skill.
 | `full-send` | "full send" | Takes a change to a merged PR with nobody watching. |
 | `full-stop` | "full stop" | Same as `full-send`, but stops when the PR is ready for me to merge. |
 | `review-loop` | "review loop", "sol loop", "council" | Reviews with other models in a loop until a stop condition, and pushes back on overreach. |
-| `file-pr` | "file a PR" | Files a PR that says who did what, leads with the problem, and shows evidence that fits the change. |
-| `pr-comments` | (automatic) | Writes and attributes comments posted on my behalf. |
+| `pr-writing` | "file a PR" (and automatic for comments) | Writes PR titles, descriptions, and comments: says who did what, leads with the problem, shows evidence that fits the change, and keeps private details out of public repos. |
 | `babysit-pr` | "babysit" | Watches a PR through CI and review bots, and fixes real findings. |
 | `modernize` | "modernize" | Rebases an old PR and decides whether it should still exist. |
 | `takeover` | "take over" | Finishes someone else's PR, branch, or thread, and keeps their credit. |
