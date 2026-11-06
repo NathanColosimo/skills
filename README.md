@@ -6,7 +6,9 @@ borrows its coupling and special-case rules from caldoai's
 [untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) (MIT).
 Some rules in `standards` and `design` are ideas from Fernando Rojo's
 [nando-skill](https://github.com/nandorojo/nando-skill), rewritten in my own
-words. `pr-writing` is built on Hugo Richard's
+words. The effect rules in `standards` are based on factory-ai's
+[no-use-effect](https://github.com/factory-ai/factory-plugins/tree/master/plugins/typescript/skills/no-use-effect).
+`pr-writing` is built on Hugo Richard's
 [What My Pull Requests Look Like Now](https://hugorcd.com/writing/what-my-pull-requests-look-like-now)
 and his `pr-writing` skill.
 

@@ -6,18 +6,29 @@ description: Code quality standards for writing, simplifying, reviewing, testing
 # Standards
 
 These rules apply to every change. They are judgment calls, not lint rules: a
-linter already catches what it can. Follow the repo's own conventions, lint
-config, and instruction files first. Where they conflict with this skill, the
-repo wins.
+linter already catches what it can. Think about each one in context instead
+of applying it mechanically.
 
-The goal: a typical change lands in one place, and nothing breaks silently
-when it does.
+Follow the repo's own conventions, lint config, and instruction files first.
+Where they conflict with this skill, the repo wins. If the repo has its own
+skills (for example in `.claude/skills`, `.agents/skills`, or `skills/`),
+read the ones that cover the area you're changing before you start.
+
+Every change has two goals, and the second matters at least as much as the
+first:
+
+1. Fix the bug or build the feature.
+2. Leave the codebase clean, easy to understand, easy to build on, and with
+   fewer places for bugs to hide.
+
+A change that meets the first goal by hurting the second is not done.
 
 There are three modes:
 
 - **Writing:** follow the rules while you make the change.
 - **Simplify pass:** once the change works, reread your diff against the rules
-  and fix what you find. Behavior must stay the same. Re-run the checks.
+  and fix what you find, starting with section 1. Behavior must stay the same.
+  Re-run the checks.
 - **Review:** check a diff against the rules and report findings. See "Review
   output".
 
@@ -36,16 +47,37 @@ full before you start:
 
 These rules still apply inside a guide's workflow.
 
-## 1. Keep the change small
+## 1. Choose the right solution
 
-- Make the smallest change that solves the case that actually happened. Do not
-  handle every case that could happen.
-- Prefer deleting or narrowing code over adding code. A fix that removes lines
-  is usually the right one.
-- Do not let review grow the change. A finding about another path, a rare
-  case, or a small cost is a follow-up, not part of this PR.
+It's easy to commit to the first idea and keep pushing it, even when it's the
+wrong fix or a hand-rolled version of something that already exists.
 
-## 2. Things that change together belong together
+- **Look for what already exists.** Before you write new code, check whether a
+  library the project already uses has an option, a flag, or a function that
+  does this. Read its docs and types. Check whether the repo already solves
+  the same problem somewhere else.
+- **Step back once it works.** Ask whether this is the simple, right solution
+  for this repo, or a workaround on top of the real problem. If it's the
+  wrong one, change it, even if that means throwing away work.
+- **Notice when you're stuck on one path.** Patching symptom after symptom, a
+  diff that keeps growing, or fighting the framework all mean the approach is
+  probably wrong. Stop and look for a different one.
+
+## 2. Keep the change focused
+
+- **Think through which cases can really happen.** Handle every case that can
+  occur in practice, especially one that would turn into a bug later. Don't
+  write code for cases that can't happen or are very unlikely. When you leave
+  a case out on purpose, know why.
+- **Prefer deleting or narrowing code over adding code.** A fix that removes
+  lines is usually the right one.
+- **Decide what belongs in this PR.** Review can find something that really is
+  part of the change, and then the change should grow. For each finding, ask
+  whether this change is wrong or incomplete without it. If it is, fix it
+  here. If it's a separate improvement (another path, a rare case, a small
+  cost), make it a follow-up PR.
+
+## 3. Things that change together belong together
 
 Ask of every piece the change touches: **should these pieces change
 together?** The code gets it wrong in three ways.
@@ -69,12 +101,12 @@ together?** The code gets it wrong in three ways.
 - A shallow module whose interface mirrors its internals, so callers change
   whenever it does. The interface should be smaller than what it hides.
 
-**Surplus:** pieces with no reason of their own to change. See section 3.
+**Surplus:** pieces with no reason of their own to change. See section 4.
 
 `git log` shows which files actually change together. Use it as evidence when
 you're unsure.
 
-## 3. Remove, don't preserve
+## 4. Remove, don't preserve
 
 When a change makes something unnecessary, delete it in the same change.
 
@@ -92,7 +124,7 @@ When a change makes something unnecessary, delete it in the same change.
   options, and parameters go. So do comments and docs that describe removed
   behavior.
 
-## 4. Special cases point at missing design
+## 5. Special cases point at missing design
 
 A special case is code that exists for one situation instead of following
 from how the system works:
@@ -109,17 +141,18 @@ each one. The right fix often looks nothing like the symptoms. If that fix is
 bigger than this change, make the small fix and list the structural one as a
 follow-up.
 
-## 5. Shape
+## 6. Shape
 
 - **Narrow early.** Parse and validate at the boundary, then handle the edge
   cases up front with early returns. The rest of the code should see one shape
   and run one path. Do not carry optional or loosely typed values deep into the
   code and branch on them there.
-- **No mode arguments.** Don't add a boolean, enum, or `kind` option whose job
-  is to pick between different code paths, like
-  `attach({ kind: "terminal" | "computer" })`. Write two explicit functions or
-  components that share the common parts. Ordinary data arguments (an ID, a
-  limit, `disabled`) are fine.
+- **Be careful with mode arguments.** A boolean, enum, or `kind` option that
+  picks between code paths, like `attach({ kind: "terminal" | "computer" })`,
+  is fine when the paths share most of their code and differ in one small
+  step. When the function becomes mostly `if (kind === ...)` branches, split
+  it into explicit functions or components that share the common parts.
+  Ordinary data arguments (an ID, a limit, `disabled`) are fine.
 - **Fewer layers.** A module with one caller and no concept of its own belongs
   in that caller. Do not add an abstraction until a second real use exists.
 - **Keep abstractions that name a real concept.** Folding code in is right when
@@ -128,7 +161,7 @@ follow-up.
 - **One way to do a thing.** Do not add a second path next to an existing one.
   Extend or replace the existing one.
 
-## 6. State
+## 7. State
 
 - **Add as little state as possible.** Before adding a state variable or store
   field, name the independent fact it holds. If you can compute the value from
@@ -137,11 +170,8 @@ follow-up.
   the data you already fetched. A copied object goes stale.
 - **Don't mirror server data.** Fetched data lives in its fetch cache. Do not
   copy it into a store, a context, or local state.
-- **Forms hold only the user's edits.** Show the fetched value until the user
-  changes a field. Don't initialize form state from the fetched object: a
-  refetch then either overwrites the user's edits or never shows up.
 
-## 7. Types
+## 8. Types
 
 The type system should make invalid states fail to compile.
 
@@ -172,7 +202,7 @@ The type system should make invalid states fail to compile.
 - **Pass an object** instead of several positional arguments of the same type,
   except on hot paths.
 
-## 8. APIs and data flow
+## 9. APIs and data flow
 
 - **Put logic on the server when it can run there.** Shape an endpoint around
   what the screen needs. If the client must wait for one response to make the
@@ -187,14 +217,12 @@ The type system should make invalid states fail to compile.
 - **Return explicit shapes.** Don't return database rows directly; pick the
   fields so private ones can't leak. Check authorization in the service, not
   the client.
-- **Create request IDs on submit,** not while the user is editing. A retry
-  reuses the same ID so the server can deduplicate it.
 
-## 9. Configuration
+## 10. Configuration
 
-- **Parse config once.** Each runtime has one typed entry point that reads and
-  validates the environment at startup. Everything else imports the parsed
-  result. No `process.env` reads scattered through the code.
+- **Use the repo's config module.** If the repo has a typed entry point that
+  reads and validates the environment, read config through it and add new
+  values there. Don't scatter `process.env` reads through the code.
 - **Required secrets have no fallback.** A missing secret fails at startup.
   Defaults are only for optional values.
 - **Keep server secrets and browser config in separate entry points,** so a
@@ -202,15 +230,26 @@ The type system should make invalid states fail to compile.
 - **No inline URLs or paths.** Define each origin, base path, and endpoint once
   as a named constant or config value, and derive related ones from it.
 
-## 10. React and UI code
+## 11. React and UI code
 
 - **Don't manage promise state by hand.** No `setLoading(true)`, `await`,
   `setError()` sequences, in a component or a custom hook. Use the query
   library (`useQuery`, `useMutation`) or `useTransition`, and read their state
   directly.
-- **Effects are a last resort.** Compute values during render, handle user
-  actions in event handlers, and fetch with the query library. Use an effect
-  only to sync with something outside React, and clean it up.
+- **Effects are a last resort.** Most effects are one of these, and each has a
+  better tool:
+  - A value computed from props or state: compute it during render. Setting
+    state from an effect costs an extra render with stale data.
+  - Fetching: use the query library. It handles races, caching, and retries.
+  - Reacting to a click or submit: do the work in the event handler. Don't set
+    a flag for an effect to notice.
+  - Resetting state when an ID changes: render the component with
+    `key={id}` so it starts fresh.
+  - Waiting for something to be ready: render the component only once it's
+    ready, so its effect runs once on mount instead of watching a flag.
+
+  Use an effect only to sync with something outside React (a subscription, a
+  DOM API, a third-party widget), and return a cleanup.
 - **Check for data before checking status.** If data exists, show it, even
   while refetching or after a refresh fails. Show the refresh error next to
   the content. Show a skeleton only on the first load, when there is no data.
@@ -223,7 +262,7 @@ The type system should make invalid states fail to compile.
 - **Don't touch browser globals** (`window`, `localStorage`) at module load or
   during a server render.
 
-## 11. Clarity
+## 12. Clarity
 
 - Reduce nesting. Prefer early returns to `else` chains.
 - No nested ternaries. Use `if`/`else` or `switch` for more than two cases.
@@ -242,7 +281,7 @@ Comments:
 - **A comment explaining a workaround** goes away when the problem behind the
   workaround does.
 
-## 12. Tests and proof
+## 13. Tests and proof
 
 A test should fail when behavior regresses, and only then.
 
@@ -255,9 +294,10 @@ A test should fail when behavior regresses, and only then.
 - **Use real dependencies when you can run them:** a real database, a local
   emulator, the real runtime. Mock only third-party services that have no test
   environment.
-- **No sleeps in tests.** Wait for a condition, or control the clock. To test a
-  loading or error state, hold the request open and release it when the test
-  is ready.
+- **Avoid sleeps in tests.** A fixed sleep is slow and flaky. Prefer waiting
+  for a condition or controlling the clock. To test a loading or error state,
+  hold the request open and release it when the test is ready. If a sleep
+  really is the only option, keep it short and say why in a comment.
 - **For a bug fix,** add one focused test that fails without the fix, when the
   repo has a test setup and nothing covers the behavior.
 - **Prove what you claim.** "It works" means you saw it work in this session:
@@ -265,14 +305,14 @@ A test should fail when behavior regresses, and only then.
   prove a user-facing flow. A tool listed in `package.json` doesn't prove it
   ran; check its output.
 
-## 13. Observability and performance
+## 14. Observability and performance
 
 - Instrument with structured spans or one wide event per unit of work, not
   scattered print logs. Keep the cause on every error you wrap.
 - A performance claim needs the mechanism and the size of the effect, measured.
   "This should be faster" is not a reason to add complexity.
 
-## 14. Checks
+## 15. Checks
 
 - **Don't silence a check to make it pass.** Don't disable a lint rule, skip a
   test, raise a threshold, or add a cast to get a green run. Fix the cause. If

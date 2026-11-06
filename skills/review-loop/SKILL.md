@@ -65,8 +65,9 @@ Intent: <intent>  Out of scope: <scope>  Checks: <results>
 Diff: git diff <base> [-- <paths>]; also read untracked files from git status --short.
 Standards: read <abs path to the installed standards/SKILL.md> and review against it.
 Read the surrounding code. Find bugs, broken callers, and mismatches with the intent.
-Hold the change to its intent. Other paths, rare cases, small perf costs, and
-extra compatibility are nits.
+Hold the change to its intent. Flag what leaves the change wrong or incomplete.
+Separate improvements (other paths, rare cases, small perf costs, extra
+compatibility) are nits.
 Reply:
 VERDICT: APPROVE or CHANGES
 SCORE: <n>/10
@@ -94,10 +95,12 @@ Push back when a reviewer is overreaching. Decline, with a reason:
   restates the code;
 - hypothetical paths the intent doesn't cover;
 - style preferences the repo doesn't share;
-- anything that grows the diff without fixing a real bug in the intended case.
+- anything that grows the diff when the change is correct and complete without
+  it. Make it a follow-up PR instead.
 
 Never agree just to end the loop. After fixing, re-run the checks and
-`git diff --shortstat <base>`. If review grew the diff, cut first.
+`git diff --shortstat <base>`. If review grew the diff, check that each
+addition was needed, and cut the ones that weren't.
 
 Keep a ledger: id, reviewer, severity, outcome (fixed / disagree / declined),
 and the evidence for each.

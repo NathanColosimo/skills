@@ -45,8 +45,8 @@ one appears.
 ## Steps
 
 1. **Finish the change.** Complete the goal from the user's request, following
-   the `standards` skill. Fix the case that happened, not every case that
-   could. If you are on the default branch, create a branch first.
+   the `standards` skill. If you are on the default branch, create a branch
+   first.
 2. **Prove it.** Get proof for every change you made. See "Proof".
 3. **Simplify.** Run the `standards` simplify pass on the full diff. Re-run the
    checks, and redo proof for any behavior the pass touched.
