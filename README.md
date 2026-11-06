@@ -33,12 +33,13 @@ landing pages. It's too large to copy, so `design` clones it into
 
 `global/AGENTS.md` holds my global agent instructions: when to apply
 `standards` and `pr-writing`, and how agents should format their responses.
-Link it into place on each machine:
+Edit it here, then copy it to `~/.claude/CLAUDE.md` and `~/.codex/AGENTS.md`:
 
 ```bash
-ln -sf ~/code/skills/global/AGENTS.md ~/.claude/CLAUDE.md
-ln -sf ~/code/skills/global/AGENTS.md ~/.codex/AGENTS.md
+./scripts/install-global.sh
 ```
+
+Run that again after pulling changes to it.
 
 ## Install
 
