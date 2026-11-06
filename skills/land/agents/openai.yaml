@@ -1,0 +1,4 @@
+interface:
+  display_name: "Land"
+  short_description: "Merge, deploy, check production, and clean up after a PR"
+  default_prompt: "Use $land to merge this PR and make sure it works in production. I am not watching this thread."

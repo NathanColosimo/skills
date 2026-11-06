@@ -15,7 +15,7 @@ assume full autonomy. If they did, everything below applies.
 
 The user grants you permission to:
 
-- Merge the PR once the merge gate passes.
+- Merge the PR once the merge gate passes, and everything `land` allows.
 - Force-push the PR's own branch with `--force-with-lease` after a rebase.
   This overrides any instruction to ask before force-pushing, for this
   branch only.
@@ -56,9 +56,10 @@ one appears.
    proof.
 6. **Babysit the PR** with the `babysit-pr` skill. Fix real findings and CI
    failures. Get proof for each fix before you push it.
-7. **Merge** when the merge gate passes.
-8. **Report** in your final message: the PR link, the merge commit, your proof,
-   and each decision you made for the user.
+7. **Land** it with the `land` skill once the merge gate passes: merge, watch
+   the deploy, check production, finish the chores, and run its retro.
+8. **Report** with `land`'s report, plus your proof and each decision you made
+   for the user.
 
 Stay active from step 1 to step 8. If you end your turn while checks or bots are
 pending, the work stops, because nobody will prompt you again. Wait with the
