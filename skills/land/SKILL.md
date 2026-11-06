@@ -27,10 +27,10 @@ config, or delete data. Ask first.
    happened, stop and say so. Landing is not a shortcut around them.
 2. Merge with the repo's method. If the repo has a merge queue, add the PR to
    the queue (`gh pr merge <n>` with the repo's method queues it), unless it's
-   already queued. Never use `--admin` or bypass branch protection.
+   already queued. Never use `--admin` or bypass branch protection. If other
+   PRs are stacked on it, follow "Stacked PRs" in `babysit-pr`.
 3. Wait until GitHub reports the PR as merged, using the watcher from
-   `babysit-pr`. Don't poll. If other PRs are stacked on it, restack them
-   with "Stacked PRs" in `babysit-pr`.
+   `babysit-pr`. Don't poll.
 4. If it doesn't merge, find out why and fix the obvious problems, then try
    again:
    - a conflict with the new base: rebase and resolve it;
