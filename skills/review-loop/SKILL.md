@@ -117,8 +117,8 @@ both sides in 2-3 lines each and let the user decide.
 Do not push during the loop. Push afterwards only if the user asked you to
 push, ship, or update the PR.
 
-If the work has a PR, put this section in its description, above the model
-line. Edit the description; do not post a comment.
+If the work has a PR, put this section in its description, right after
+Evidence. Edit the description; do not post a comment.
 
 ```markdown
 ## Review

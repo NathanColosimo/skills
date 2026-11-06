@@ -32,6 +32,9 @@ to post exactly as written.
   output, or the reproduction.
 - Keep it short. No thanks, no filler, no status narration.
 - Separate what you verified from what you judge.
+- Show evidence that fits the claim, the same way `file-pr` does: real output,
+  a before-and-after capture, a measured number. Never retype or tidy output.
+- Say what you didn't check, in one sentence.
 - Use a list or a short code block when it reads more easily than prose.
 
 Common shapes:
