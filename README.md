@@ -14,6 +14,7 @@ work; see [Attribution](#attribution) at the end.
 | `pr-writing` | "file a PR" (and automatic for comments) | Writes PR titles, descriptions, and comments: says who did what, leads with the problem, shows evidence that fits the change, and keeps private details out of public repos. |
 | `babysit-pr` | "babysit" | Watches a PR through CI and review bots, and fixes real findings. |
 | `modernize` | "modernize" | Rebases an old PR and decides whether it should still exist. |
+| `stacked-prs` | "stacked PRs", "stack" | Creates, restacks, and merges GitHub's native stacked PRs with `gh stack`. Restacks after squash merges. |
 | `takeover` | "take over" | Finishes someone else's PR, branch, or thread, and keeps their credit. |
 
 Default reviewers: GPT Sol 6.1. Council: Claude Opus 5.5 and GPT Sol 6.1.
@@ -70,4 +71,6 @@ Edit this repo, not the installed copies. An update overwrites those.
 | `design` (`frontend-design` guide) | [anthropics/skills](https://github.com/anthropics/skills) | Anthropic |
 | `design` (`emil-design-eng`, `animate`, `animate-expo`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `break-ui` guides) | [skill](https://github.com/emilkowalski/skill), [skills](https://github.com/emilkowalski/skills) | Emil Kowalski |
 | `design` (landing pages) | [taste-skill](https://github.com/leonxlnx/taste-skill) | leonxlnx |
+| `stacked-prs` | [gh-stack skill](https://github.com/github/gh-stack/tree/main/skills/gh-stack) | GitHub |
+| `stacked-prs` | [dsh-merging-stacked-prs](https://github.com/deepseek-ai/deepseek-harness/tree/main/.agents/skills/dsh-merging-stacked-prs) | DeepSeek |
 | `pr-writing` | [What My Pull Requests Look Like Now](https://hugorcd.com/writing/what-my-pull-requests-look-like-now) and his `pr-writing` skill | Hugo Richard |

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Stacked PRs"
+  short_description: "Create, restack, and merge GitHub's native stacked PRs with gh stack"
+  default_prompt: "Use $stacked-prs to merge the approved PRs at the bottom of this stack and restack the rest."

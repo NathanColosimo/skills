@@ -103,6 +103,8 @@ narrows code.
 
 ## Base branch and merging
 
+If the PR is in a stack (its base is another PR's branch), follow `stacked-prs`.
+
 Keep an eye on changes to `main` and rebase when needed. `pr-wait` reports when
 new base commits touch this PR's files, and when the PR becomes BEHIND or DIRTY.
 `watch_pull_request` reports conflicts only, so check for BEHIND yourself
@@ -117,40 +119,3 @@ otherwise report that the PR is ready. Right before a merge, run `git fetch` and
 check the PR again. Never merge when it is BEHIND or DIRTY, or when base commits
 that landed after the last green run touch this PR's files. Rebase, push, and
 wait for green again.
-
-## Stacked PRs
-
-A stacked PR's base is another PR's branch. Rebasing and force-pushing to
-keep a stack current is pre-authorized. First check whether it's a native
-GitHub stack: `gh api repos/<owner>/<repo>/stacks` lists them.
-
-**Native stack.** Create stacks with `gh stack submit`, or join existing PRs
-with `gh stack link <prs>`, so they get this behavior.
-
-- Merge with `gh stack merge <highest approved PR> --squash -y`. It merges that
-  PR and every PR below it, all or nothing. GitHub then rebases and retargets
-  the PRs above.
-- If a PR above still shows a conflict after a squash (GitHub doesn't always
-  rebase it), run `gh stack checkout <n>`, then `gh stack rebase`. Resolve,
-  `gh stack rebase --continue`, then `gh stack push`. Exit code 3 means a
-  conflict.
-- Don't rebase its branches by hand.
-
-**Plain stack** (PRs chained only by base branch). After the lower PR
-squash-merges, the PRs above still carry its original commits, so they show
-its changes again and can conflict:
-
-1. Before you merge, list the PRs stacked on it: `gh pr list --base <its
-   branch>`. Once it merges, GitHub moves them onto its base, and this list
-   comes back empty. A PR you watch that changes base after its base PR merges
-   needs the same restack.
-2. Get the merged PR's final head: `gh pr view <n> --json headRefOid`.
-3. `git rebase --onto origin/<base> <final head> <branch>`, then
-   `gh pr edit <n> --base <base>` unless GitHub already did it.
-4. Push with `--force-with-lease=<branch>:<its head before the rebase>`.
-5. Repeat up the stack, onto the branch below, using that branch's head from
-   before its rebase.
-6. Merge the next PR only after it's green. Never `gh pr merge` or auto-merge
-   a PR whose base is another PR's branch: it merges into that branch.
-
-Resolve mechanical conflicts. Stop and report the ones that need a decision.
