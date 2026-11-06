@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design"
+  short_description: "UI design, polish, motion, and landing pages"
+  default_prompt: "Use $design to pick the right design guide for this and follow it."

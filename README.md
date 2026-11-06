@@ -6,6 +6,7 @@ My agent skills for Claude Code and Codex. Several are adapted from
 | Skill | Say | What it does |
 |---|---|---|
 | `standards` | (automatic) | Code quality rules for writing, simplifying, and reviewing code. Every other skill applies it. |
+| `design` | (automatic) | UI design, polish, motion, and landing pages. Routes to the guides in `skills/design/guides`. |
 | `full-send` | "full send" | Takes a change to a merged PR with nobody watching. |
 | `full-stop` | "full stop" | Same as `full-send`, but stops when the PR is ready for me to merge. |
 | `review-loop` | "review loop", "sol loop", "council" | Reviews with other models in a loop until a stop condition, and pushes back on overreach. |
@@ -16,6 +17,26 @@ My agent skills for Claude Code and Codex. Several are adapted from
 | `takeover` | "take over" | Finishes someone else's PR, branch, or thread, and keeps their credit. |
 
 Default reviewers: GPT Sol 6.1. Council: Claude Opus 5.5 and GPT Sol 6.1.
+
+## Design guides
+
+`skills/design/guides` holds copies of other people's skills, renamed from
+`SKILL.md` to `GUIDE.md` so they install only as part of `design`:
+
+- `frontend-design` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0)
+- `emil-design-eng`, `animate`, `animate-expo`, `review-animations`,
+  `improve-animations`, `find-animation-opportunities`, and `break-ui` from
+  Emil Kowalski's [skill](https://github.com/emilkowalski/skill) and
+  [skills](https://github.com/emilkowalski/skills) repos (MIT)
+
+Each guide keeps its upstream license. To refresh them from upstream:
+
+```bash
+./scripts/sync-design-guides.sh
+```
+
+[taste-skill](https://github.com/leonxlnx/taste-skill) (MIT) is too large to
+copy, so `design` clones it into `~/.cache/taste-skill` when it needs it.
 
 ## Install
 
