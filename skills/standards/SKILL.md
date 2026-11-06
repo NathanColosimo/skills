@@ -1,6 +1,6 @@
 ---
 name: standards
-description: Code quality standards for writing, simplifying, and reviewing code. Use whenever you write or change code, before filing or updating a PR, when reviewing a diff or PR, or when the user asks to simplify, clean up, or check quality.
+description: Code quality standards for writing, simplifying, reviewing, testing, and debugging code. Use whenever you write or change code, before filing or updating a PR, when reviewing a diff or PR, when the user asks to simplify or clean up, wants test-first development (TDD, red-green-refactor), or reports a bug, failure, or slowdown to diagnose.
 ---
 
 # Standards
@@ -23,6 +23,20 @@ There are three modes:
 
 Scope every mode to the diff and the code it touches. Do not rewrite unrelated
 code. Note it as a follow-up instead.
+
+## Guides
+
+Two workflows have their own guides in this skill's folder. Read the guide in
+full before you start, along with the files it mentions next to it:
+
+| Task | Guide |
+| --- | --- |
+| Build a feature or fix a bug test-first; red-green-refactor | `guides/tdd/GUIDE.md` |
+| Diagnose a hard bug, a failure, or a performance regression | `guides/diagnosing-bugs/GUIDE.md` |
+
+The guides were written as separate skills. When one mentions "SKILL.md", it
+means its own `GUIDE.md`. When one sends refactoring to a review skill, use
+the simplify pass here. These rules still apply inside a guide's workflow.
 
 ## 1. Keep the change small
 

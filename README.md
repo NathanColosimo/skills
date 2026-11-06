@@ -7,7 +7,7 @@ borrows its coupling and special-case rules from caldoai's
 
 | Skill | Say | What it does |
 |---|---|---|
-| `standards` | (automatic) | Code quality rules for writing, simplifying, and reviewing code. Every other skill applies it. |
+| `standards` | (automatic) | Code quality rules for writing, simplifying, reviewing, testing, and debugging code. Every other skill applies it. Includes the `tdd` and `diagnosing-bugs` guides. |
 | `design` | (automatic) | UI design, polish, motion, and landing pages. Routes to the guides in `skills/design/guides`. |
 | `full-send` | "full send" | Takes a change to a merged PR with nobody watching. |
 | `full-stop` | "full stop" | Same as `full-send`, but stops when the PR is ready for me to merge. |
@@ -20,21 +20,25 @@ borrows its coupling and special-case rules from caldoai's
 
 Default reviewers: GPT Sol 6.1. Council: Claude Opus 5.5 and GPT Sol 6.1.
 
-## Design guides
+## Guides
 
-`skills/design/guides` holds copies of other people's skills, renamed from
-`SKILL.md` to `GUIDE.md` so they install only as part of `design`:
+`skills/standards/guides` and `skills/design/guides` hold copies of other
+people's skills, renamed from `SKILL.md` to `GUIDE.md` so they install only as
+part of their parent skill:
 
-- `frontend-design` from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0)
+- `tdd` and `diagnosing-bugs` (in `standards`) from
+  [mattpocock/skills](https://github.com/mattpocock/skills) (MIT)
+- `frontend-design` (in `design`) from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0)
 - `emil-design-eng`, `animate`, `animate-expo`, `review-animations`,
-  `improve-animations`, `find-animation-opportunities`, and `break-ui` from
+  `improve-animations`, `find-animation-opportunities`, and `break-ui` (in
+  `design`) from
   Emil Kowalski's [skill](https://github.com/emilkowalski/skill) and
   [skills](https://github.com/emilkowalski/skills) repos (MIT)
 
 Each guide keeps its upstream license. To refresh them from upstream:
 
 ```bash
-./scripts/sync-design-guides.sh
+./scripts/sync-guides.sh
 ```
 
 [taste-skill](https://github.com/leonxlnx/taste-skill) (MIT) is too large to
