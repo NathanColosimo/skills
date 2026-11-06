@@ -1,7 +1,9 @@
 # skills
 
 My agent skills for Claude Code and Codex. Several are adapted from
-[tstack](https://github.com/t3dotgg/tstack) by Theo Browne (MIT).
+[tstack](https://github.com/t3dotgg/tstack) by Theo Browne (MIT). `standards`
+borrows its coupling and special-case rules from caldoai's
+[untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) (MIT).
 
 | Skill | Say | What it does |
 |---|---|---|
