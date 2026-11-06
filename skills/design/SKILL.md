@@ -10,14 +10,10 @@ read each one in full before you start, and follow it. Several can apply at
 once, for example `frontend-design` with `animate`.
 
 Paths below are relative to this skill's folder. Each guide lives in
-`guides/<name>/GUIDE.md`, and the files it mentions sit next to it. The
-guides were written as separate skills:
-
-- When a guide names another one by its skill name (for example "use
-  `review-animations`"), read `guides/<that name>/GUIDE.md`.
-- When a guide's files say "SKILL.md", they mean that guide's `GUIDE.md`.
-- Names a guide mentions that aren't listed below (like `expo-router`) are
-  separate skills. Use them only if they are installed.
+`guides/<name>/GUIDE.md`, and the files it mentions sit next to it. When a
+guide points to another guide by name, read `guides/<that name>/GUIDE.md`.
+The animation values all guides share (frequency, easing, durations, springs)
+are in `guides/review-animations/STANDARDS.md`.
 
 The project's own design system, tokens, and components come first. A guide
 shapes how you use them. It doesn't replace them.

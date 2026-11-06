@@ -1,115 +1,130 @@
----
-name: animate
-description: Build an animation from scratch, making the decisions in the order that determines whether it feels right — should it animate at all, what purpose, which tool, which properties, which curve and duration, how it interrupts, how it exits. Writes the implementation. Use when asked to animate something, add motion, make a component feel alive, or build a transition. For critiquing existing motion use review-animations; for auditing a whole codebase use improve-animations.
----
+# Building animations
 
-# Building Animations
+Use this to turn a request for motion into an implementation on the web. For
+React Native, use the `animate-expo` guide. To critique existing motion, use
+the `review-animations` guide. To audit a whole codebase, use the
+`improve-animations` guide.
 
-## Initial Response
+Two mistakes matter most, and the first is worse:
 
-When this skill is first invoked without a specific question, respond only with:
+1. **Animating something that shouldn't animate.** The first two steps below
+   sometimes end with no code at all. That's a correct result.
+2. **Using the wrong ingredients:** `ease-in` on an entrance, `scale(0)`,
+   keyframes on a toast, a duration that makes a dropdown feel slow.
 
-> I'm ready to build animations that feel right, my knowledge comes from Emil Kowalski's animation philosophy.
+Make the call yourself. Don't offer a menu of motion options; state your
+reasoning in one line and write the code.
 
-Do not provide any other information until the user asks a question.
+## Rules
 
-A construction skill. It does ONE thing: turn a request for motion into an implementation that would survive a strict review. It does not audit a codebase (that's `improve-animations`), critique a diff (that's `review-animations`), hunt for places that could animate (that's `find-animation-opportunities`), or build for React Native (that's `animate-expo`).
+- **Go through the steps in order.** Steps 1 and 2 decide whether anything
+  animates. Don't pick a curve before that.
+- **Use the values in this guide.** Every curve, duration, and spring config
+  comes from the tables below. Never make up a curve because it looks
+  familiar.
+- **Use the codebase's existing tokens.** If `--ease-out` or a duration scale
+  already exists, use it. Don't add a second system.
+- **Ship reduced motion and hover gating with the animation,** not later.
+- **Use the cheapest tool that works.** Don't install a motion library for a
+  fade.
 
-## Operating Posture
+## 1. Should it animate at all?
 
-You are a senior design engineer building the animation yourself. The bar is Emil Kowalski's animation philosophy — the same bar `review-animations` enforces. Write it so it passes that review the first time.
-
-Two failure modes, and the first is worse:
-
-1. **Animating something that shouldn't animate.** The gate below exists to produce zero lines of code sometimes. That's a success, not a dodge.
-2. **Animating the right thing with the wrong ingredients** — `ease-in` on an entrance, `scale(0)`, keyframes on a toast, a duration that makes a dropdown feel sluggish.
-
-Never present motion options as a menu. Make the call, state the reasoning in one line, write the code.
-
-## Hard Rules
-
-1. **Run the sequence in order.** Steps 1 and 2 gate everything. Don't reach for a curve before you know whether it animates at all.
-2. **No approximated values.** Every curve, duration, and spring config comes from the tables below. Never invent `cubic-bezier(0.4, 0, 0.2, 1)` because it looks familiar.
-3. **Extend the codebase's tokens, don't fork them.** If `--ease-out` or a duration scale already exists, use it. Adding a parallel system is a defect.
-4. **Reduced motion and hover gating ship with the animation**, not as a follow-up.
-5. **Cheapest tool that works.** Don't install a motion library for a fade.
-
-## The Build Sequence
-
-### 1. Should this animate at all?
-
-| Frequency | Decision |
+| How often the user sees it | Decision |
 | --- | --- |
-| 100+ times/day (keyboard shortcuts, command palette toggle) | **No animation. Ever.** Stop here. |
-| Tens of times/day (hover effects, list navigation) | Near-imperceptible only — fast and subtle, or nothing |
-| Occasional (modals, drawers, toasts) | Standard animation |
-| Rare / first-time (onboarding, success, celebration) | The delight budget lives here |
+| 100+ times a day (keyboard shortcuts, command palette toggle) | **No animation.** Stop here. |
+| Tens of times a day (hover effects, list navigation) | Barely noticeable motion only, or none |
+| Occasionally (modals, drawers, toasts) | Standard animation |
+| Rarely or once (onboarding, success, celebration) | Room for delight |
 
-**Keyboard-initiated actions are a disqualifier, not a judgment call.** Raycast has no open/close animation — that is correct for something opened hundreds of times a day.
+Anything triggered from the keyboard doesn't animate. Raycast has no
+open/close animation, which is right for something opened hundreds of times a
+day.
 
-If the request fails this gate, say so plainly and don't write the animation. Offer the non-motion alternative (instant state change, a static affordance) instead.
+If the request fails this step, say so and don't write the animation. Offer
+the non-motion alternative, like an instant state change or a static
+affordance.
 
-### 2. What is the purpose?
+## 2. What is it for?
 
-Name it in one of these words before continuing:
+Name the purpose before going on:
 
-- **Feedback** — confirming the interface heard the user
-- **Spatial consistency** — showing where something came from or went
-- **State indication** — making a state change legible
-- **Preventing a jarring change** — bridging content that would otherwise teleport
-- **Explanation** — demonstrating how something works (marketing/onboarding only)
-- **Delight** — allowed *only* at the rare/first-time tier
+- **Feedback:** confirms the interface heard the user.
+- **Spatial consistency:** shows where something came from or went.
+- **State indication:** makes a state change readable.
+- **Preventing a jarring change:** bridges content that would otherwise jump.
+- **Explanation:** shows how something works (marketing and onboarding only).
+- **Delight:** only for things the user sees rarely.
 
-Can't name it? Don't build it. "It looks cool" on a frequently-seen element is a reason to stop.
+If you can't name one, don't build it. "It looks cool" is not a purpose.
 
-Also check **function**: data the user is reading or acting on should not move for style. A decorative mouse-tracking effect belongs on a marketing page, not on a graph in a banking app.
+Data the user is reading or acting on should not move for style. A mouse-
+tracking effect belongs on a marketing page, not on a graph in a banking app.
 
-### 3. Pick the tool — cheapest that works
+## 3. Pick the tool
 
-Walk down; stop at the first that fits.
+Go down the table and stop at the first row that fits.
 
 | Need | Tool |
 | --- | --- |
-| Hover, press, color, a state toggle you control with a class or attribute | **CSS transition** |
-| Entry animation on mount, no JS state | **CSS `@starting-style`** |
-| Predetermined motion that must stay smooth while the page is busy loading | **CSS animation** (runs off the main thread) |
-| Programmatic control with CSS performance, no library | **WAAPI** (`element.animate()`) |
+| Hover, press, color, or a state toggled by a class or attribute | **CSS transition** |
+| An entry animation on mount, with no JS state | **CSS `@starting-style`** |
+| Fixed motion that must stay smooth while the page is busy loading | **CSS animation** (runs off the main thread) |
+| Control from JS with CSS performance, no library | **WAAPI** (`element.animate()`) |
 | Springs, layout animations, exit animations, gesture-driven values | **Motion** (`motion.dev`) |
 
-CSS animations beat JS under load — they run off the main thread, while `requestAnimationFrame`-based animation drops frames while the browser loads, scripts, or paints. Use CSS for predetermined motion, JS for dynamic and interruptible motion.
+CSS animations stay smooth under load because they run off the main thread.
+Animations driven by `requestAnimationFrame` drop frames while the browser is
+loading, running scripts, or painting. Use CSS for fixed motion and JS for
+dynamic, interruptible motion.
 
-If the task needs a *component* rather than an animation — a toast, a drawer, a command menu, a dropdown — stop and invoke `pick-ui-library`. Hand-rolling those is how you end up with a `<div>` dropdown and no focus management.
+If the task is really a component (a toast, drawer, command menu, dropdown),
+use a component library instead of building it by hand. Hand-built versions
+end up as a `<div>` dropdown with no focus management.
 
-### 4. Pick the properties
+## 4. Pick the properties
 
-- **`transform` and `opacity` only.** They skip layout and paint and run on the GPU. `width`/`height`/`margin`/`padding`/`top`/`left` trigger all three. (`clip-path` is the sanctioned fourth — see RECIPES.md. `height` is tolerated only for accordions, where there's no transform equivalent.)
-- **Never `scale(0)`.** Start from `scale(0.9–0.97)` + `opacity: 0`. Nothing in the real world appears from nothing.
-- **`transform-origin` at the trigger** for popovers, dropdowns, menus, tooltips — `var(--transform-origin)` in Base UI. **Modals are exempt**; they're not anchored to a trigger, so they stay centered.
-- **Percentages in `translate()`** are relative to the element's own size — `translateY(100%)` moves by its own height whatever the content. Prefer over hardcoded pixels.
-- **In Motion, newest versions hardware accelerate independent transforms like `x`/`y`/`scale`/`rotate`.**
+- **Animate only `transform` and `opacity`.** They skip layout and paint and
+  run on the GPU. `width`, `height`, `margin`, `padding`, `top`, and `left`
+  trigger layout, paint, and compositing on every frame. `clip-path` is also
+  fine (see [RECIPES.md](RECIPES.md)). `height` is acceptable only for
+  accordions, where nothing else works.
+- **Never start from `scale(0)`.** Start from `scale(0.9)` to `scale(0.97)`
+  with `opacity: 0`. Nothing real appears out of nothing.
+- **Set `transform-origin` at the trigger** for popovers, dropdowns, menus,
+  and tooltips (`var(--transform-origin)` in Base UI). Modals are the
+  exception: they aren't anchored to a trigger, so they stay centered.
+- **Use percentages in `translate()`.** They're relative to the element's own
+  size, so `translateY(100%)` moves it by its own height whatever the
+  content. Prefer them to fixed pixels.
+- **In Motion 14.2 and later,** independent transforms like `x`, `y`,
+  `scale`, and `rotate` are hardware accelerated. In older versions, use a
+  full `transform` string:
 
 ```jsx
-<motion.div animate={{ x: 100 }} />                          // motion 14.2+: hardware accelerated
-<motion.div animate={{ transform: "translateX(100px)" }} />  // hardware accelerated in every version
+<motion.div animate={{ x: 100 }} />                          // accelerated in 14.2+
+<motion.div animate={{ transform: "translateX(100px)" }} />  // accelerated in every version
 ```
 
-- **Never drive a child's transform from a CSS variable on the parent** — it recalculates styles for every child. Set `transform` on the element directly.
+- **Don't drive a child's transform from a CSS variable on the parent.** It
+  recalculates styles for every child. Set `transform` on the element itself.
 
-### 5. Easing and duration — or a spring
+## 5. Easing and duration, or a spring
 
-**Easing**, in decision order:
+**Easing:**
 
 | Situation | Easing |
 | --- | --- |
 | Entering or exiting | `ease-out` |
-| Moving / morphing on screen | `ease-in-out` |
-| Hover / color change | `ease` |
+| Moving or morphing on screen | `ease-in-out` |
+| Hover or color change | `ease` |
 | Constant motion (marquee, progress) | `linear` |
-| Default | `ease-out` |
+| Anything else | `ease-out` |
 
-**Never `ease-in` on UI.** It starts slow, delaying the exact moment the user is watching. `ease-out` at 200ms *feels* faster than `ease-in` at 200ms.
+**Never use `ease-in` on UI.** It starts slow, delaying the moment the user
+is watching. `ease-out` at 200ms feels faster than `ease-in` at 200ms.
 
-Built-in CSS easings are too weak. Use these:
+The built-in CSS curves are too weak. Use these:
 
 ```css
 --ease-out: cubic-bezier(0.23, 1, 0.32, 1);        /* strong ease-out for UI */
@@ -117,7 +132,8 @@ Built-in CSS easings are too weak. Use these:
 --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);     /* iOS-like drawer curve (Ionic) */
 ```
 
-Need a curve that isn't here? Take it from [easing.dev](https://easing.dev/) or [easings.co](https://easings.co/). Don't hand-roll one.
+For a curve that isn't here, take one from [easing.dev](https://easing.dev/)
+or [easings.co](https://easings.co/). Don't hand-roll one.
 
 **Duration:**
 
@@ -127,37 +143,46 @@ Need a curve that isn't here? Take it from [easing.dev](https://easing.dev/) or 
 | Tooltips, small popovers | 125–200ms |
 | Dropdowns, selects | 150–250ms |
 | Modals, drawers | 200–500ms |
-| Marketing / explanatory | Can be longer |
+| Marketing and explanatory | Can be longer |
 
-**UI animations stay under 300ms.** A 180ms dropdown feels more responsive than a 400ms one.
+Keep UI animations under 300ms. A 180ms dropdown feels more responsive than a
+400ms one.
 
-**Reach for a spring instead** when the motion is drag with momentum, an element that should feel alive, a gesture the user can interrupt or reverse, or decorative mouse-tracking:
+**Use a spring instead** for a drag with momentum, an element that should feel
+alive, a gesture the user can interrupt or reverse, or decorative mouse
+tracking:
 
 ```js
-{ type: "spring", duration: 0.5, bounce: 0.2 }        // Apple-style — easier to reason about
-{ type: "spring", mass: 1, stiffness: 100, damping: 10 }  // traditional physics — more control
+{ type: "spring", duration: 0.5, bounce: 0.2 }            // Apple-style, easier to reason about
+{ type: "spring", mass: 1, stiffness: 100, damping: 10 }  // physics-style, more control
 ```
 
-Keep bounce at 0.1–0.3, and avoid bounce in most UI — reserve it for drag-to-dismiss and playful interactions.
+Keep bounce between 0.1 and 0.3, and leave it out of most UI. Save it for
+drag-to-dismiss and playful interactions.
 
-### 6. Interruption and exit
+## 6. Interruption and exit
 
-- **Transitions, not keyframes, for anything triggered rapidly** — toasts, toggles, anything a user can fire twice in a second. Transitions retarget from the current value; keyframes restart from zero.
-- **Springs for gestures**, because they carry velocity through an interruption.
-- **Exit the way it entered.** A toast that slides in from the bottom leaves through the bottom. Symmetric paths are what make swipe-to-dismiss feel obvious.
-- **Asymmetric timing where the user is deciding.** Slow on the deliberate phase (a hold-to-confirm press: 2s linear), snappy on the system response (release: 200ms ease-out).
+- **Use transitions, not keyframes, for anything triggered quickly:** toasts,
+  toggles, anything a user can fire twice in a second. Transitions continue
+  from the current value; keyframes restart from zero.
+- **Use springs for gestures.** They carry velocity through an interruption.
+- **Exit the way it entered.** A toast that slides in from the bottom leaves
+  through the bottom. Matching paths make swipe-to-dismiss feel obvious.
+- **Make timing uneven where the user is deciding.** Slow during the
+  deliberate part (holding to confirm: 2s linear), fast for the system's
+  response (release: 200ms ease-out).
 
-### 7. Reduced motion and pointer gating
+## 7. Reduced motion and pointer gating
 
-Ships with the animation, every time.
+Ship these with every animation:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  .element { animation: fade 0.2s ease; } /* keep opacity/color, drop transform-based motion */
+  .element { animation: fade 0.2s ease; } /* keep opacity and color, drop movement */
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .element:hover { transform: scale(1.05); } /* touch fires false hovers on tap */
+  .element:hover { transform: scale(1.05); } /* touch screens fire false hovers on tap */
 }
 ```
 
@@ -166,42 +191,48 @@ const reduce = useReducedMotion();
 const closedX = reduce ? 0 : '-100%';
 ```
 
-Reduced motion means **fewer and gentler** animations, not zero — keep transitions that aid comprehension, remove movement and position changes.
+Reduced motion means fewer and gentler animations, not none. Keep transitions
+that help the user understand a change; remove movement and position changes.
 
 ## Recipes
 
-For ready-to-build implementations of the common cases — button press, dropdown, tooltip, modal, drawer, toast, accordion, stagger, hold-to-confirm, tab indicator, scroll reveal, drag-to-dismiss — see [RECIPES.md](RECIPES.md). Load it whenever the request matches one of those components; start from the recipe rather than from a blank file.
+[RECIPES.md](RECIPES.md) has ready implementations for: button press,
+dropdown, tooltip, modal, drawer, toast, accordion, staggered entrance,
+hold-to-confirm, tab indicator, scroll reveal, and drag-to-dismiss. When the
+request matches one, start from the recipe.
 
-## Never Ship
+## Never ship
 
-Self-check before you finish. Each of these is an automatic block in `review-animations`:
+Check these before you finish. The `review-animations` guide blocks every one.
 
 | Never | Instead |
 | --- | --- |
 | `transition: all` | Name the exact properties |
-| `transform: scale(0)` entrance | `scale(0.95)` + `opacity: 0` |
+| A `scale(0)` entrance | `scale(0.95)` with `opacity: 0` |
 | `ease-in` on a UI element | `ease-out` or a strong custom curve |
-| Built-in `ease-out` on a deliberate animation | `cubic-bezier(0.23, 1, 0.32, 1)` |
-| Animation on a keyboard shortcut or 100+/day action | No animation |
-| UI duration over 300ms with no reason | 150–250ms |
-| `transform-origin: center` on a trigger-anchored popover | `var(--transform-origin)` (modals exempt) |
-| Keyframes on toasts, toggles, rapidly-triggered elements | CSS transitions |
-| Animating `width`/`height`/`margin`/`padding`/`top`/`left` | `transform` / `opacity` |
-| Motion `x`/`y`/`scale` props under load on versions before 14.2 | Upgrade to 14.2+, or a full `transform` string |
-| Ungated `:hover` motion | `@media (hover: hover) and (pointer: fine)` |
-| Missing `prefers-reduced-motion` | Gentler variant, not zero |
-| Everything entering at once | 30–80ms stagger |
+| The built-in `ease-out` on a deliberate animation | `cubic-bezier(0.23, 1, 0.32, 1)` |
+| Animation on a keyboard shortcut or a 100+/day action | No animation |
+| A UI duration over 300ms with no reason | 150–250ms |
+| `transform-origin: center` on a popover anchored to a trigger | `var(--transform-origin)` (modals excepted) |
+| Keyframes on toasts, toggles, or anything triggered quickly | CSS transitions |
+| Animating `width`, `height`, `margin`, `padding`, `top`, or `left` | `transform` and `opacity` |
+| Motion `x`/`y`/`scale` props under load, before version 14.2 | Upgrade to 14.2+, or use a full `transform` string |
+| `:hover` motion with no pointer gating | `@media (hover: hover) and (pointer: fine)` |
+| No `prefers-reduced-motion` handling | A gentler variant, not none |
+| Everything entering at once | A 30–80ms stagger |
 
-## Output
+## What to report
 
-Write the code. Then, in at most a few lines:
+Write the code. Then add a few lines:
 
-- **The gate result** — frequency tier and the named purpose. If something in the request was rejected, say which and why.
-- **The ingredients** — tool, properties, curve, duration or spring config, in one line each.
-- **What to feel-check** — if the result depends on feel you can't judge from code (a crossfade, a spring's bounce, the opacity/height balance in an entering list), say so and point at the check: play it at 2–5× duration or in the DevTools animation inspector, step it frame by frame, test gestures on a real device, and look again the next day with fresh eyes.
+- **The decision:** how often the user sees it and the purpose you named. If
+  you rejected part of the request, say which part and why.
+- **The ingredients:** tool, properties, curve, and duration or spring config,
+  one line each.
+- **What to check by eye:** when the result depends on feel you can't judge
+  from code (a crossfade, a spring's bounce, opacity against height in an
+  entering list), say so. Play it at 2–5× duration or in the DevTools
+  animation inspector, step through it frame by frame, test gestures on a real
+  device, and look again the next day.
 
-Don't pad this into a report. The code is the deliverable.
-
-## Tone
-
-Opinionated and brief. When the honest answer is "this shouldn't animate," give it — that answer is the reason this skill exists. When feel genuinely can't be settled from code, say so instead of guessing at a value.
+Keep it short. The code is the deliverable.

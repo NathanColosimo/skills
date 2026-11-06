@@ -28,28 +28,18 @@ Default reviewers: GPT Sol 6.1. Council: Claude Opus 5.5 and GPT Sol 6.1.
 ## Guides
 
 Guides are workflows that install only as part of their parent skill, so
-they don't show up as skills of their own.
+they don't show up as skills of their own. All of them are edited copies of
+other people's skills, trimmed and rewritten here. They don't sync from
+upstream, and each keeps its original license.
 
-`skills/standards/guides` holds `tdd` and `diagnosing-bugs`, rewritten from
-[mattpocock/skills](https://github.com/mattpocock/skills) (MIT). They are
-edited here and not synced.
-
-`skills/design/guides` holds unedited copies of other people's skills, renamed
-from `SKILL.md` to `GUIDE.md`:
-
-- `frontend-design` (in `design`) from [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0)
-- `emil-design-eng`, `animate`, `animate-expo`, `review-animations`,
-  `improve-animations`, `find-animation-opportunities`, and `break-ui` (in
-  `design`) from
+- `standards/guides`: `tdd` and `diagnosing-bugs`, from
+  [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).
+- `design/guides`: `frontend-design`, from
+  [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0);
+  `emil-design-eng`, `animate`, `animate-expo`, `review-animations`,
+  `improve-animations`, `find-animation-opportunities`, and `break-ui`, from
   Emil Kowalski's [skill](https://github.com/emilkowalski/skill) and
-  [skills](https://github.com/emilkowalski/skills) repos (MIT)
-
-Each guide keeps its upstream license. To refresh the design guides from
-upstream:
-
-```bash
-./scripts/sync-guides.sh
-```
+  [skills](https://github.com/emilkowalski/skills) repos (MIT).
 
 [taste-skill](https://github.com/leonxlnx/taste-skill) (MIT) is too large to
 copy, so `design` clones it into `~/.cache/taste-skill` when it needs it.

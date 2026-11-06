@@ -1,14 +1,14 @@
-# Animation Recipes
+# Animation recipes
 
-Ready-to-build implementations for the cases that come up most. Start from the recipe, then adapt — don't rebuild from scratch.
+Starting points for the most common cases. Start from the recipe and adapt it.
 
-Curves are the `--ease-out`, `--ease-in-out`, and `--ease-drawer` tokens defined in SKILL.md.
+The curves are the `--ease-out`, `--ease-in-out`, and `--ease-drawer` tokens
+defined in [GUIDE.md](GUIDE.md).
 
----
 
 ## Button press
 
-Any pressable element. Instant feedback that the interface heard the user.
+Any pressable element. It shows the interface heard the press.
 
 ```css
 .button {
@@ -20,15 +20,14 @@ Any pressable element. Instant feedback that the interface heard the user.
 }
 ```
 
-`scale()` scales children too — the label and icons come along, which is what makes it read as a physical press.
+`scale()` scales the children too. The label and icons shrink with it, which makes it read as a physical press.
 
-No hover gating needed here: `:active` is a real press on touch. Gate any `:hover` styling separately.
+No hover gating is needed: `:active` is a real press on touch screens. Gate any `:hover` styles separately.
 
----
 
 ## Dropdown, popover, menu, select
 
-Scales out of its trigger, not out of thin air.
+It scales out of its trigger.
 
 ```css
 .popover {
@@ -45,13 +44,12 @@ Scales out of its trigger, not out of thin air.
 }
 ```
 
-The `transform-origin` is the whole point — the panel should look like it came out of the thing you clicked.
+The `transform-origin` matters most: the panel should look like it came out of the thing you clicked.
 
----
 
 ## Tooltip
 
-Same shape as a popover, faster, plus the detail most implementations miss.
+Like a popover, but faster, and with one extra rule.
 
 ```css
 .tooltip {
@@ -67,15 +65,14 @@ Same shape as a popover, faster, plus the detail most implementations miss.
   transform: scale(0.97);
 }
 
-/* Once one tooltip is open, neighbours open instantly */
+/* Once one tooltip is open, its neighbors open instantly */
 .tooltip[data-instant] {
   transition-duration: 0ms;
 }
 ```
 
-The initial delay prevents accidental activation. After that, skipping both the delay and the animation makes the whole toolbar feel faster.
+Keep the initial delay so tooltips don't open by accident. Once one is open, skip both the delay and the animation for the next one, so moving along a toolbar feels fast.
 
----
 
 ## Modal
 
@@ -100,9 +97,8 @@ The one popover that stays centered.
 }
 ```
 
-Animate the backdrop's opacity alongside it so they read as one surface.
+Animate the backdrop's opacity with it so they read as one surface.
 
----
 
 ## Drawer / sheet
 
@@ -117,11 +113,8 @@ Animate the backdrop's opacity alongside it so they read as one surface.
 }
 ```
 
-This is how Vaul hides a drawer before animating it in.
+This is how Vaul hides a drawer before animating it in. For dragging, see **Drag to dismiss** below.
 
-Add drag and it becomes a gesture problem — see **Drag to dismiss** below.
-
----
 
 ## Toast
 
@@ -140,17 +133,16 @@ Add drag and it becomes a gesture problem — see **Drag to dismiss** below.
 }
 ```
 
-- `ease` rather than `ease-out`, slightly slower than typical UI: Sonner reads as elegant partly because its motion is tuned to the component's personality rather than to the generic UI budget.
-- If `@starting-style` isn't available, fall back to the mount flag:
+- It uses `ease` instead of `ease-out`, and runs a little slower than typical UI. Sonner's toasts feel calm partly because their timing suits the component rather than the general UI budget.
+- Where `@starting-style` isn't supported, fall back to a mount flag:
 
 ```jsx
 useEffect(() => { setMounted(true); }, []);
 // <div data-mounted={mounted}>
 ```
 
-When toasts stack and the list reflows, the opacity change has to work against the height change. There's no formula for that pair — adjust until it feels right, then check it again the next day.
+When toasts stack and the list reflows, the opacity change has to work against the height change. There's no formula for that pair. Adjust until it feels right, then check again the next day.
 
----
 
 ## Accordion / collapse
 
@@ -163,13 +155,12 @@ When toasts stack and the list reflows, the opacity change has to work against t
 }
 ```
 
-Keep it short — this is one of the few animations that costs layout on every frame, so a long duration is expensive as well as sluggish. Measure the content height in JS (or use a headless primitive that supplies it) rather than animating to `auto`.
+Keep it short. This is one of the few animations that runs layout on every frame, so a long one is expensive as well as slow. Measure the content height in JS, or use a headless component that provides it, instead of animating to `auto`.
 
----
 
 ## Stagger a group entrance
 
-For a list or grid the user sees occasionally — not for a list they scroll past all day.
+For a list or grid the user sees occasionally, not one they scroll past all day.
 
 ```css
 .item {
@@ -190,13 +181,12 @@ For a list or grid the user sees occasionally — not for a list they scroll pas
 }
 ```
 
-Stagger is decorative — it must never block interaction while it plays.
+Stagger is decoration. It must never block interaction while it plays.
 
----
 
 ## Hold to confirm
 
-For destructive actions where a plain click is too easy to fire by accident.
+For destructive actions where a plain click is too easy to hit by accident.
 
 ```css
 .overlay {
@@ -214,15 +204,14 @@ For destructive actions where a plain click is too easy to fire by accident.
 }
 ```
 
-`linear` is correct here — the fill is a progress indicator, and progress shouldn't ease.
+`linear` is right here: the fill shows progress, and progress shouldn't ease.
 
----
 
 ## Tab indicator with a color transition
 
-Timing individual color transitions across a tab list never quite lands. Clip instead.
+Timing separate color transitions across a tab list never quite lines up. Clip instead.
 
-Duplicate the tab list. Style the copy as the active state — different background, different text color. Clip the copy so only the active tab shows, and animate the clip on change:
+Duplicate the tab list and style the copy as the active state, with its own background and text color. Clip the copy so only the active tab shows, and animate the clip when the tab changes:
 
 ```css
 .tabs-active-copy {
@@ -231,13 +220,12 @@ Duplicate the tab list. Style the copy as the active state — different backgro
 }
 ```
 
-The text and background change together, in perfect sync, because they're one element being revealed rather than two colors being interpolated.
+The text and background change in sync, because one element is being revealed instead of two colors being blended.
 
----
 
 ## Scroll reveal
 
-Marketing surfaces only. Don't do this to functional UI a user visits daily.
+Marketing pages only. Don't do this to UI people use every day.
 
 ```css
 .reveal {
@@ -250,13 +238,12 @@ Marketing surfaces only. Don't do this to functional UI a user visits daily.
 }
 ```
 
-Trigger with `IntersectionObserver`, or Motion's `useInView` with `{ once: true, margin: "-100px" }`. Fire it once — re-animating on every scroll-by is an interface fighting its reader.
+Trigger it with `IntersectionObserver`, or Motion's `useInView` with `{ once: true, margin: "-100px" }`. Fire it once. Re-animating every time the element scrolls past gets in the reader's way.
 
----
 
 ## Drag to dismiss
 
-The gesture recipe. Springs, not durations, because the user can reverse mid-motion.
+Use springs, not durations, because the user can reverse mid-motion.
 
 ```js
 // Dismiss on a flick, not just on distance
@@ -274,24 +261,23 @@ if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
 element.style.transform = `translateY(${distance}px)`;
 ```
 
-Four details that separate a good drag from a bad one:
+Get these four details right:
 
-- **Pointer capture** once the drag starts, so it continues when the pointer leaves the element's bounds.
-- **Multi-touch protection** — `if (isDragging) return` on new touch points, or switching fingers mid-drag makes the element jump.
-- **Damping past boundaries** — dragging beyond a natural edge moves the element less the further it goes. Real things slow before they stop.
-- **Friction, not a wall** — allow the over-drag with rising resistance rather than refusing it.
+- **Capture the pointer** once the drag starts, so it continues when the pointer leaves the element.
+- **Ignore extra touches:** `if (isDragging) return` on new touch points, or switching fingers mid-drag makes the element jump.
+- **Dampen past the edge:** dragging beyond a natural boundary moves the element less the further it goes.
+- **Resist instead of stopping:** allow the over-drag with rising resistance rather than blocking it.
 
-Settle with a spring so an interrupted drag keeps its velocity:
+Settle with a spring, so an interrupted drag keeps its velocity:
 
 ```js
 { type: "spring", duration: 0.5, bounce: 0.2 }
 ```
 
----
 
 ## Masking a crossfade that won't settle
 
-When two states overlap visibly during a transition and no amount of easing or duration tuning fixes it, blur the seam:
+When two states visibly overlap during a transition and no easing or duration fixes it, blur them:
 
 ```css
 .content {
@@ -306,13 +292,12 @@ When two states overlap visibly during a transition and no amount of easing or d
 }
 ```
 
-Without blur the eye reads two distinct objects swapping. Blur blends them into one perceived transformation. Keep it under 20px — heavy blur is expensive, especially in Safari.
+Without blur, the eye sees two objects swapping. With it, they read as one thing changing. Keep the blur under 20px; heavy blur is expensive, especially in Safari.
 
----
 
 ## Programmatic, without a library
 
-When the motion needs JS control but not a dependency, WAAPI gives you CSS-grade performance:
+When the motion needs JS control but not a library, WAAPI performs like CSS:
 
 ```js
 element.animate(
@@ -321,4 +306,4 @@ element.animate(
 );
 ```
 
-Hardware-accelerated, interruptible, no bundle cost.
+It's hardware accelerated, interruptible, and adds nothing to the bundle.
