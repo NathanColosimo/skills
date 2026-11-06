@@ -18,6 +18,8 @@ PR still belongs in the product.
   the active worktree is dirty or is being used for other work.
 - Modernizing authorizes rebasing and updating the PR branch. It does not
   authorize merging, closing, changing the base branch, or expanding scope.
+- If a lower PR in its stack was squash-merged, restack it with "Stacked PRs"
+  in `babysit-pr`, which also covers changing its base.
 - Never use an unqualified force push. Update a rebased branch with
   `--force-with-lease` against the head SHA observed before the rebase.
 - Do not post a PR comment unless the user asked for one. Use the

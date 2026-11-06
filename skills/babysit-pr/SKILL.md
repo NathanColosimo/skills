@@ -117,3 +117,30 @@ otherwise report that the PR is ready. Right before a merge, run `git fetch` and
 check the PR again. Never merge when it is BEHIND or DIRTY, or when base commits
 that landed after the last green run touch this PR's files. Rebase, push, and
 wait for green again.
+
+## Stacked PRs
+
+A stacked PR's base is another PR's branch. After the lower PR squash-merges,
+the PRs above it still carry its original commits, so they show its changes
+again and can conflict. Restack them right away. Rebasing and force-pushing
+for this is pre-authorized.
+
+1. Before you merge a PR, list the PRs stacked on it:
+   `gh pr list --base <its branch>`. Once it merges and its branch is
+   deleted, GitHub moves them onto its base, and this list comes back empty.
+   A PR you watch that changes base after its base PR merges needs the same
+   restack.
+2. Get the merged PR's final head: `gh pr view <n> --json headRefOid`.
+3. Rebase each stacked PR onto the merged PR's base:
+   `git rebase --onto origin/<base> <final head> <branch>`.
+4. Run `gh pr edit <n> --base <base>`, unless GitHub already retargeted it.
+5. Push with `--force-with-lease=<branch>:<its head before the rebase>`.
+6. Repeat up the stack. Rebase each branch onto the one below it, using that
+   branch's head from before its rebase.
+7. Resolve mechanical conflicts. Stop and report the ones that need a
+   decision.
+
+To merge several stacked PRs, merge the bottom one, restack, wait for green,
+then merge the next. Never merge a PR or enable auto-merge on it while its
+base is another PR's branch: it would merge into that branch, not the default
+branch.
