@@ -1,16 +1,7 @@
 # skills
 
-My agent skills for Claude Code and Codex. Several are adapted from
-[tstack](https://github.com/t3dotgg/tstack) by Theo Browne (MIT). `standards`
-borrows its coupling and special-case rules from caldoai's
-[untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) (MIT).
-Some rules in `standards` and `design` are ideas from Fernando Rojo's
-[nando-skill](https://github.com/nandorojo/nando-skill), rewritten in my own
-words. The effect rules in `standards` are based on factory-ai's
-[no-use-effect](https://github.com/factory-ai/factory-plugins/tree/master/plugins/typescript/skills/no-use-effect).
-`pr-writing` is built on Hugo Richard's
-[What My Pull Requests Look Like Now](https://hugorcd.com/writing/what-my-pull-requests-look-like-now)
-and his `pr-writing` skill.
+My agent skills for Claude Code and Codex. Many are built on other people's
+work; see [Attribution](#attribution) at the end.
 
 | Skill | Say | What it does |
 |---|---|---|
@@ -30,21 +21,24 @@ Default reviewers: GPT Sol 6.1. Council: Claude Opus 5.5 and GPT Sol 6.1.
 ## Guides
 
 Guides are workflows that install only as part of their parent skill, so
-they don't show up as skills of their own. All of them are edited copies of
-other people's skills, trimmed and rewritten here. They don't sync from
-upstream, and each keeps its original license.
+they don't show up as skills of their own. They're my own edited copies of
+other people's skills, trimmed and rewritten. They don't sync from upstream,
+and each keeps its original license.
 
-- `standards/guides`: `tdd` and `diagnosing-bugs`, from
-  [mattpocock/skills](https://github.com/mattpocock/skills) (MIT).
-- `design/guides`: `frontend-design`, from
-  [anthropics/skills](https://github.com/anthropics/skills) (Apache-2.0);
-  `emil-design-eng`, `animate`, `animate-expo`, `review-animations`,
-  `improve-animations`, `find-animation-opportunities`, and `break-ui`, from
-  Emil Kowalski's [skill](https://github.com/emilkowalski/skill) and
-  [skills](https://github.com/emilkowalski/skills) repos (MIT).
+`design` uses [taste-skill](https://github.com/leonxlnx/taste-skill) for
+landing pages. It's too large to copy, so `design` clones it into
+`~/.cache/taste-skill` when it needs it.
 
-[taste-skill](https://github.com/leonxlnx/taste-skill) (MIT) is too large to
-copy, so `design` clones it into `~/.cache/taste-skill` when it needs it.
+## Global instructions
+
+`global/AGENTS.md` holds my global agent instructions: when to apply
+`standards` and `pr-writing`, and how agents should format their responses.
+Link it into place on each machine:
+
+```bash
+ln -sf ~/code/skills/global/AGENTS.md ~/.claude/CLAUDE.md
+ln -sf ~/code/skills/global/AGENTS.md ~/.codex/AGENTS.md
+```
 
 ## Install
 
@@ -68,3 +62,17 @@ Edit this repo, not the installed copies. An update overwrites those.
 - `python3` for `babysit-pr`'s `pr-wait` script.
 - `review-loop` needs subagents on other providers' models. T3 Code provides
   them through `delegate_task`.
+
+## Attribution
+
+| Used in | Source | Author | License | How it's used |
+| --- | --- | --- | --- | --- |
+| `full-send`, `full-stop`, `modernize`, `takeover`, `babysit-pr` | [tstack](https://github.com/t3dotgg/tstack) | Theo Browne | MIT | Adapted |
+| `standards` | [untangle-codebase](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md) | caldoai | MIT | Coupling and special-case rules |
+| `standards` (`tdd`, `diagnosing-bugs` guides) | [mattpocock/skills](https://github.com/mattpocock/skills) | Matt Pocock | MIT | Edited copies |
+| `standards` | [no-use-effect](https://github.com/factory-ai/factory-plugins/tree/master/plugins/typescript/skills/no-use-effect) | Factory | None stated | Ideas, rewritten |
+| `standards`, `design` | [nando-skill](https://github.com/nandorojo/nando-skill) | Fernando Rojo | None stated | Ideas, rewritten |
+| `design` (`frontend-design` guide) | [anthropics/skills](https://github.com/anthropics/skills) | Anthropic | Apache-2.0 | Edited copy |
+| `design` (`emil-design-eng`, `animate`, `animate-expo`, `review-animations`, `improve-animations`, `find-animation-opportunities`, `break-ui` guides) | [skill](https://github.com/emilkowalski/skill), [skills](https://github.com/emilkowalski/skills) | Emil Kowalski | MIT | Edited copies |
+| `design` (landing pages) | [taste-skill](https://github.com/leonxlnx/taste-skill) | leonxlnx | MIT | Fetched on demand |
+| `pr-writing` | [What My Pull Requests Look Like Now](https://hugorcd.com/writing/what-my-pull-requests-look-like-now) and his `pr-writing` skill | Hugo Richard | None stated | Ideas, rewritten |

@@ -58,8 +58,8 @@ one appears.
    failures. Get proof for each fix before you push it.
 7. **Land** it with the `land` skill once the merge gate passes: merge, watch
    the deploy, check production, finish the chores, and run its retro.
-8. **Report** with `land`'s report, plus your proof and each decision you made
-   for the user.
+8. **Report** using `land`'s report sections. Put your proof and each decision
+   you made for the user under **Landing**.
 
 Stay active from step 1 to step 8. If you end your turn while checks or bots are
 pending, the work stops, because nobody will prompt you again. Wait with the

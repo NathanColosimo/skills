@@ -136,16 +136,17 @@ prevent it. Don't apply the changes. The user picks which to do.
 
 ## Report
 
-When you stop, report in this order:
+When you stop, use these sections, and leave out any that would be empty:
 
-1. **Status:** landed and healthy, landed with a problem, or not landed, in
-   one line.
-2. **Merge:** the PR link, the merge commit, and any fixes made to get it
-   in.
-3. **Deploy and production:** what deployed, what you checked, and the
-   numbers you saw.
-4. **Chores:** what you closed, commented on, and filed, with links, and
-   anything left for the user.
-5. **Retro:** up to three findings, or "skipped: small change".
+- **Summary:** landed and healthy, landed with a problem, or not landed, and
+  what that means for the user.
+- **Status:** the PR link, the merge commit, what deployed, and how far the
+  production check got.
+- **Landing:** the fixes it took to merge, what you checked in production
+  and the numbers you saw, and what you closed, commented on, and filed, with
+  links.
+- **Retro:** up to three findings, or "skipped: small change".
+- **Needs you:** anything still waiting on the user, including which retro
+  fixes to make, with your recommendation first.
 
 In T3 Code, call `unwatch_pull_request` before you stop or ask a question.
