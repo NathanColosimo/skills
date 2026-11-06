@@ -190,6 +190,8 @@ prompt next to its output.
   every claim has evidence or says why there's none, and that "In short" makes
   sense on its own.
 - Open a real PR, not a draft, so review bots run.
+- To file a stack of PRs, create it as a native stack ("Stacked PRs" in
+  `babysit-pr`).
 - If `gh pr create` fails because the GraphQL rate limit is used up, use REST:
   `gh api repos/<owner>/<repo>/pulls -f title=... -f head=... -f base=... -F body=@<file>`.
 - If the user also asked you to babysit it, continue with `babysit-pr`.
