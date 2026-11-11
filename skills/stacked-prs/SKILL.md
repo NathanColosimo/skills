@@ -13,9 +13,7 @@ native stacks through the `gh stack` extension
 (`gh extension install github/gh-stack`). Don't chain PRs by hand.
 
 Rebasing a stack, and the lease-protected force-pushes that `gh stack push`
-and `gh stack sync` do, are pre-authorized, even where a general rule says to
-ask before force-pushing. They touch only the stack's own branches, and the
-lease makes them fail if anyone else pushed.
+and `gh stack sync` do, are pre-authorized.
 
 ## Agent rules
 
