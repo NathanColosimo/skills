@@ -26,9 +26,10 @@ A change that meets the first goal by hurting the second is not done.
 There are three modes:
 
 - **Writing:** follow the rules while you make the change.
-- **Simplify pass:** once the change works, reread your diff against the rules
-  and fix what you find, starting with section 1. Behavior must stay the same.
-  Re-run the checks.
+- **Simplify pass:** once the change works, follow `guides/simplify/GUIDE.md`
+  on the diff: name the problems it fixes, then cut every line that no named
+  problem needs until a pass deletes nothing. Behavior a user would notice must
+  stay the same. Re-run the checks.
 - **Review:** check a diff against the rules and report findings. See "Review
   output".
 
@@ -37,15 +38,26 @@ code. Note it as a follow-up instead.
 
 ## Guides
 
-Two workflows have their own guides in this skill's folder. Read the guide in
-full before you start:
+Three workflows have their own guides in this skill's folder. Read the guide
+in full before you start:
 
 | Task | Guide |
 | --- | --- |
 | Build a feature or fix a bug test-first | `guides/tdd/GUIDE.md` |
 | Diagnose a hard bug, a failure, or a performance regression | `guides/diagnosing-bugs/GUIDE.md` |
+| Simplify a change or PR until it's as small as it can be | `guides/simplify/GUIDE.md` |
 
 These rules still apply inside a guide's workflow.
+
+## 0. Start from what a user would see
+
+Every fix, audit finding, and review finding starts with one sentence: who
+hits the problem, what they see, and how often. Prove it happens on the base
+branch with a failing test or a precise trace before you fix it.
+
+A finding with no user who would notice it is a nit at most. Don't fix it in
+this change. Hunting for a pattern ("find every race", "find every implicit
+state machine") is a way to find candidates, not a reason to fix each one.
 
 ## 1. Choose the right solution
 
@@ -71,6 +83,10 @@ wrong fix or a hand-rolled version of something that already exists.
   a case out on purpose, know why.
 - **Prefer deleting or narrowing code over adding code.** A fix that removes
   lines is usually the right one.
+- **Scale to the real deployment.** Check who actually runs the code. If one
+  person uses it, or you ship every client together, there's no backward
+  compatibility to keep. Handle the concurrency the real callers create, not
+  every interleaving that's possible in theory.
 - **Decide what belongs in this PR.** Review can find something that really is
   part of the change, and then the change should grow. For each finding, ask
   whether this change is wrong or incomplete without it. If it is, fix it
@@ -134,6 +150,17 @@ from how the system works:
 - a swallowed exception;
 - a retry or a sleep;
 - a disabled or skipped test.
+
+Machinery is a special case too. Add none of these without naming the
+problem from section 0 that comes back without it:
+
+- a new module or file for one fix;
+- a reducer or state machine;
+- a revision, generation, or attempt counter;
+- a lock, retry, backoff, or queue;
+- a new table, column, or migration;
+- a compatibility path or feature detection;
+- an option bag, wrapper, or one-use helper.
 
 Before you add one, look for the general fix that makes it unnecessary. When
 several special cases share a cause, fix the cause once instead of patching
@@ -299,7 +326,9 @@ A test should fail when behavior regresses, and only then.
   hold the request open and release it when the test is ready. If a sleep
   really is the only option, keep it short and say why in a comment.
 - **For a bug fix,** add one focused test that fails without the fix, when the
-  repo has a test setup and nothing covers the behavior.
+  repo has a test setup and nothing covers the behavior. One test per real
+  problem: no matrix of orderings, races, and edge cases unless each row is
+  something a user could hit.
 - **Prove what you claim.** "It works" means you saw it work in this session:
   command output, a reproduction, a screenshot. Green mocked tests do not
   prove a user-facing flow. A tool listed in `package.json` doesn't prove it
@@ -331,8 +360,14 @@ Report each finding with the rule it breaks:
 - **blocker:** the intended case is wrong.
 - **should:** a real bug callers will hit, or a standards violation that makes
   the code harder to change (a hidden link, a shim, a dead branch, a lost
-  type, a test that proves nothing).
+  type, a test that proves nothing, machinery no named problem needs).
 - **nit:** everything else.
+
+A blocker or should about behavior names the scenario: the steps a user or
+caller takes and what goes wrong. Without one, it's a nit.
+
+Also list code the change could delete and still do its job. Each deletion is
+a should.
 
 When several findings share one cause, report the cause once with the findings
 under it, and give the one fix that resolves them all.

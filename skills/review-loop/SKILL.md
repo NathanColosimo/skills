@@ -23,7 +23,10 @@ substitute another model.
 
 **Stop condition:** use the user's, for example "until both approve", "3
 rounds", "until every score is 9 or higher", or "until no blockers". The
-default is that every reviewer approves with no open blocker or should.
+default is that every reviewer approves with no open blocker or should that
+names a scenario a user can hit. Scores are informational. Don't chase a
+score unless the user asked for one: each extra round finds rarer cases, and
+the diff grows to handle them.
 
 **Budget:** 3 rounds by default. Go up to 5 only for security, auth,
 permissions, data loss, or concurrency while a blocker or should is still open
@@ -41,9 +44,11 @@ nits. Running out of budget is not approval.
    - Local: `git merge-base HEAD origin/<default-branch>`.
 3. Fix what you already know about: outstanding PR comments, failing checks,
    known bugs. Do not send reviewers code you know is broken.
-4. Run the `standards` simplify pass on the diff yourself, then run the checks
-   that cover it.
-5. Write the intent and what is out of scope in 1-2 sentences.
+4. Run the `standards` simplify pass (`guides/simplify/GUIDE.md`) on the diff
+   yourself, then run the checks that cover it.
+5. Write the intent and what is out of scope in 1-2 sentences. The intent
+   names the problems the change fixes, from the simplify guide's step 1.
+6. Record the size: `git diff --shortstat <base>`.
 
 ## 3. Start reviewers
 
@@ -68,10 +73,16 @@ Read the surrounding code. Find bugs, broken callers, and mismatches with the in
 Hold the change to its intent. Flag what leaves the change wrong or incomplete.
 Separate improvements (other paths, rare cases, small perf costs, extra
 compatibility) are nits.
+Every blocker or should about behavior needs a scenario: the steps a real user
+or caller takes, what they see, and how likely it is. Without one, it's a nit.
+Also list code the change could delete and still fix its intent: unused
+machinery, guards for cases that can't happen, tests that repeat each other.
+Each deletion is a should.
 Reply:
 VERDICT: APPROVE or CHANGES
 SCORE: <n>/10
-S1 [blocker|should|nit] <file>:<line> <claim>. Fix: <suggestion>
+S1 [blocker|should|nit] <file>:<line> <claim>. Scenario: <steps → what goes wrong>. Fix: <suggestion>
+D1 [should] <file>:<lines> <what to delete and why the intent still holds>
 ```
 
 Find the standards path with `ls ~/.agents/skills/standards/SKILL.md
@@ -99,8 +110,10 @@ Push back when a reviewer is overreaching. Decline, with a reason:
   it. Make it a follow-up PR instead.
 
 Never agree just to end the loop. After fixing, re-run the checks and
-`git diff --shortstat <base>`. If review grew the diff, check that each
-addition was needed, and cut the ones that weren't.
+`git diff --shortstat <base>`. If review grew the diff, check each addition
+against the scenario that justified it, and revert the ones without one. A
+fix for a real scenario should be the smallest one: a narrowed condition
+before a new guard, a guard before a new mechanism.
 
 Keep a ledger: id, reviewer, severity, outcome (fixed / disagree / declined),
 and the evidence for each.
@@ -116,6 +129,11 @@ If a reviewer still disputes an item after two replies, stop arguing. Show
 both sides in 2-3 lines each and let the user decide.
 
 ## 6. Finish
+
+After the last round, run the simplify guide on the whole diff again. Review
+fixes pile up, and nothing else removes them. If that pass changed behavior,
+re-run the checks and send one short confirmation round on the changed code
+only.
 
 Do not push during the loop. Push afterwards only if the user asked you to
 push, ship, or update the PR.
@@ -134,4 +152,5 @@ Evidence. Edit the description; do not post a comment.
 Write `no score` when a reviewer gave none. Never invent one.
 
 Report: the reviewers, the rounds, what changed because of review, the diff
-size before and after, and each declined or disputed finding with its reason.
+size before review, after review, and after the final simplify pass, and each
+declined or disputed finding with its reason.
