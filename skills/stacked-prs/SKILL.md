@@ -90,6 +90,11 @@ queue, the stack is queued and the queue picks the method.
 - **After:** confirm each one shows `MERGED`, run `gh stack sync --prune`, then
   check CI on the layers that remain. Don't delete branches or retarget PRs by
   hand.
+- **Sync right away, even if the next PR looks fine.** GitHub retargets it to
+  the trunk but doesn't always rebase it, so its diff can show the merged
+  layers' changes again. Don't hand-build merge commits to avoid sync's
+  force-push: they break the linear chain `gh stack merge` needs ("not a
+  linear descendant").
 
 ## Fallback: stacks unavailable (exit 9)
 
