@@ -5,12 +5,12 @@ work; see [Attribution](#attribution) at the end.
 
 | Skill | Say | What it does |
 |---|---|---|
-| `standards` | (automatic) | Code quality rules for writing, simplifying, reviewing, testing, and debugging code. Every other skill applies it. Includes the `tdd` and `diagnosing-bugs` guides. |
+| `standards` | (automatic) | Code quality rules for writing, simplifying, reviewing, testing, and debugging code. Every other skill applies it. Includes the `tdd`, `diagnosing-bugs`, and `simplify` guides. |
 | `design` | (automatic) | UI design, polish, motion, and landing pages. Routes to the guides in `skills/design/guides`. |
 | `full-send` | "full send" | Takes a change to a merged PR with nobody watching. |
 | `full-stop` | "full stop" | Same as `full-send`, but stops when the PR is ready for me to merge. |
 | `land` | "land" | Merges a finished PR (through the merge queue if there is one), watches the deploy and production, closes related issues and PRs, and runs a short retro. |
-| `review-loop` | "review loop", "sol loop", "council" | Reviews with other models in a loop until a stop condition, and pushes back on overreach. |
+| `review-loop` | "review loop", "sol loop", "council" | Reviews with other models in a loop until a stop condition, pushes back on overreach, and ends with a simplify pass. |
 | `pr-writing` | "file a PR" (and automatic for comments) | Writes PR titles, descriptions, and comments: says who did what, leads with the problem, shows evidence that fits the change, and keeps private details out of public repos. |
 | `babysit-pr` | "babysit" | Watches a PR through CI and review bots, and fixes real findings. |
 | `modernize` | "modernize" | Rebases an old PR and decides whether it should still exist. |

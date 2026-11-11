@@ -48,10 +48,12 @@ one appears.
    the `standards` skill. If you are on the default branch, create a branch
    first.
 2. **Prove it.** Get proof for every change you made. See "Proof".
-3. **Simplify.** Run the `standards` simplify pass on the full diff. Re-run the
-   checks, and redo proof for any behavior the pass touched.
+3. **Simplify.** Run the `standards` simplify pass
+   (`guides/simplify/GUIDE.md`) on the full diff. Re-run the checks, and redo
+   proof for any behavior the pass touched.
 4. **Get review** with the `review-loop` skill, using its default reviewers
-   unless the user named others.
+   unless the user named others. It ends with a second simplify pass, so the
+   PR doesn't keep code that only review added.
 5. **File the PR** with the `pr-writing` skill. Its Evidence section shows your
    proof.
 6. **Babysit the PR** with the `babysit-pr` skill. Fix real findings and CI
