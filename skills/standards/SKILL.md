@@ -276,7 +276,13 @@ The type system should make invalid states fail to compile.
     ready, so its effect runs once on mount instead of watching a flag.
 
   Use an effect only to sync with something outside React (a subscription, a
-  DOM API, a third-party widget), and return a cleanup.
+  DOM API, a third-party widget), and return a cleanup. When it should run
+  once on mount, call a `useMountEffect(fn)` helper that wraps
+  `useEffect(fn, [])`, so the intent is explicit. Use the repo's helper if it
+  has one.
+- **In review, every new `useEffect` is a should.** Name which case above it
+  is and give the replacement. The only exception is an effect that syncs
+  with something outside React and cleans up.
 - **Check for data before checking status.** If data exists, show it, even
   while refetching or after a refresh fails. Show the refresh error next to
   the content. Show a skeleton only on the first load, when there is no data.
