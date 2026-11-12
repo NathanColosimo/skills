@@ -59,7 +59,8 @@ one appears.
 6. **Babysit the PR** with the `babysit-pr` skill. Fix real findings and CI
    failures. Get proof for each fix before you push it.
 7. **Land** it with the `land` skill once the merge gate passes: merge, watch
-   the deploy, check production, finish the chores, and run its retro.
+   the deploy, check production, finish the chores, and run its retro if
+   one is needed.
 8. **Report** using `land`'s report sections. Put your proof and each decision
    you made for the user under **Landing**.
 
