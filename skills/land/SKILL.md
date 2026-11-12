@@ -1,6 +1,6 @@
 ---
 name: land
-description: Land a finished PR. Merge it (through the merge queue if the repo has one), watch it deploy, check production, finish the follow-up chores, and run a short retro. Use when the user says "land", "land it", or "land the PR", usually after full-stop or full-send. Not for landing pages; that's the design skill.
+description: Land a finished PR. Merge it (through the merge queue if the repo has one), watch it deploy, check production, finish the follow-up chores, and run a retro when the session turned up something worth fixing. Use when the user says "land", "land it", or "land the PR", usually after full-stop or full-send. Not for landing pages; that's the design skill.
 ---
 
 # Land
@@ -118,22 +118,15 @@ chores.
 
 ## 6. Retro
 
-Only for a big change: a large diff, several review rounds, CI or merge
-failures, a production problem, or a session where the user had to correct
-you. Skip it otherwise, and say so.
+Most landings don't need one. Run it only when the session hit something
+a change to the environment would prevent next time: a mistake a check
+could have caught, a missing or wrong instruction, the user correcting you,
+CI or merge failures, a production problem, or a step that was slow every
+time. A big diff or several review rounds is not a reason by itself.
 
-Report **at most three** findings, ranked by how much fixing them would
-help future work. Leave out everything else. Good findings are things that
-cost real time or caused a real bug, and that one change would prevent:
-
-- a check that would have caught a mistake (a lint rule, a type, a test);
-- a missing or wrong instruction in the repo's instruction files or skills,
-  or in the user's skills;
-- information you needed and couldn't get, like logs or access to a service;
-- a step that was slow every time.
-
-For each one: what happened, its cost, and the single change that would
-prevent it. Don't apply the changes. The user picks which to do.
+When you run it, follow the [retro](../retro/SKILL.md) skill on this
+session, and report **at most three** findings. If nothing is worth
+fixing, skip it without comment.
 
 ## Report
 
@@ -146,7 +139,7 @@ When you stop, use these sections, and leave out any that would be empty:
 - **Landing:** the fixes it took to merge, what you checked in production
   and the numbers you saw, and what you closed, commented on, and filed, with
   links.
-- **Retro:** up to three findings, or "skipped: small change".
+- **Retro:** up to three findings, only when you ran one.
 - **Needs you:** anything still waiting on the user, including which retro
   fixes to make, with your recommendation first.
 

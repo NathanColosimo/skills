@@ -1,0 +1,5 @@
+interface:
+  display_name: "Retro"
+  short_description: "Find environment fixes that would improve future sessions"
+policy:
+  allow_implicit_invocation: false
