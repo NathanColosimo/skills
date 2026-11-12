@@ -38,9 +38,16 @@ and then hangs. So:
   prints the top-level help instead.
 - Turn on `git config rerere.enabled true` so conflict resolutions get reused
   across layers.
-- Never pass `--accept-base-change` on your own. `sync` and `rebase` ask for it
-  only when GitHub retargeted the stack and the old base never merged, so
-  accepting drops commits that never landed. Ask the user first.
+- `sync` and `rebase` stop and ask about a base change in one case only: the
+  bottom PR's base branch was deleted without merging, and GitHub retargeted
+  the stack onto the trunk. The layers above still carry the deleted base's
+  commits. Settle it without asking the user:
+  - **The base's PR is closed:** it was dropped on purpose. Rerun with
+    `--accept-base-change`, which removes its commits from the layers above,
+    then run the checks and fix any layer that still relied on its code.
+  - **The base's PR is still open:** the branch was deleted by mistake.
+    Restore it with `git push origin <its PR's headRefOid>:refs/heads/<branch>`
+    and sync again. Nothing is dropped.
 
 ## Is it a native stack?
 
