@@ -122,18 +122,8 @@ Only for a big change: a large diff, several review rounds, CI or merge
 failures, a production problem, or a session where the user had to correct
 you. Skip it otherwise, and say so.
 
-Report **at most three** findings, ranked by how much fixing them would
-help future work. Leave out everything else. Good findings are things that
-cost real time or caused a real bug, and that one change would prevent:
-
-- a check that would have caught a mistake (a lint rule, a type, a test);
-- a missing or wrong instruction in the repo's instruction files or skills,
-  or in the user's skills;
-- information you needed and couldn't get, like logs or access to a service;
-- a step that was slow every time.
-
-For each one: what happened, its cost, and the single change that would
-prevent it. Don't apply the changes. The user picks which to do.
+Follow the [retro](../retro/SKILL.md) skill on this session, and report
+**at most three** findings.
 
 ## Report
 
