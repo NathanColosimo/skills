@@ -12,6 +12,11 @@ retargets the PRs above after a merge, squash merges included. Always use
 native stacks through the `gh stack` extension
 (`gh extension install github/gh-stack`). Don't chain PRs by hand.
 
+Use v0.3.0 or later. Check with `gh extension list`, and run
+`gh extension upgrade stack` if it's older. Before v0.3.0, `sync` and
+`rebase` replayed already-merged commits when a local branch was out of date,
+which caused conflicts in files the layer never touched.
+
 Rebasing a stack, and the lease-protected force-pushes that `gh stack push`
 and `gh stack sync` do, are pre-authorized.
 
@@ -33,6 +38,16 @@ and then hangs. So:
   prints the top-level help instead.
 - Turn on `git config rerere.enabled true` so conflict resolutions get reused
   across layers.
+- `sync` and `rebase` stop and ask about a base change in one case only: the
+  bottom PR's base branch was deleted without merging, and GitHub retargeted
+  the stack onto the trunk. The layers above still carry the deleted base's
+  commits. Settle it without asking the user:
+  - **The base's PR is closed:** it was dropped on purpose. Rerun with
+    `--accept-base-change`, which removes its commits from the layers above,
+    then run the checks and fix any layer that still relied on its code.
+  - **The base's PR is still open:** the branch was deleted by mistake.
+    Restore it with `git push origin <its PR's headRefOid>:refs/heads/<branch>`
+    and sync again. Nothing is dropped.
 
 ## Is it a native stack?
 
@@ -73,6 +88,12 @@ detects squash merges, replays the remaining layers with `--onto`, and pushes.
 - **A false conflict after a squash merge:** GitHub doesn't always rebase the
   next PR. It shows "Resolve conflicts" and no "Rebase stack" button.
   `gh stack sync` fixes it.
+- **Conflicts in files the layer never touched:** sync is replaying merged
+  commits. Check the version first. If it still happens on v0.3.0 or later,
+  run `gh stack rebase --abort` and rebase each remaining layer by hand onto
+  its updated parent:
+  `git rebase --onto <parent> <old parent head> <branch>`, then
+  `git push --force-with-lease=<branch>:<its head before the rebase>`.
 
 After any rewrite, run the checks for every changed layer before you call it
 ready. In a worktree, `rebase` and `sync` update the clean worktrees and skip
