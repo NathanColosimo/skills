@@ -13,8 +13,9 @@ wrong or overreaching.
 
 **Reviewers:**
 
-- Default, and "sol loop": **GPT Sol 6.1**.
-- "council": **Claude Opus 5.5** and **GPT Sol 6.1**, in parallel.
+- Default, and "sol loop": **GPT Sol 6.2** at high reasoning.
+- "council": **Claude Opus 5.5** at high reasoning and **GPT Sol 6.2** at high
+  reasoning, in parallel.
 - If the user names models, use those instead.
 
 Run every reviewer at high reasoning effort. Resolve the model IDs at runtime;
@@ -146,7 +147,7 @@ Evidence. Edit the description; do not post a comment.
 
 | Reviewer | Round 1 | Round 2 |
 | --- | --- | --- |
-| GPT Sol 6.1 | 7/10 | 9/10, approved |
+| GPT Sol 6.2 | 7/10 | 9/10, approved |
 ```
 
 Write `no score` when a reviewer gave none. Never invent one.

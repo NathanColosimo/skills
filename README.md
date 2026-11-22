@@ -19,7 +19,7 @@ work; see [Attribution](#attribution) at the end.
 | `grilling` | "grill me" | Questions me about a plan in rounds, with a recommended answer for each, until we agree on every decision. |
 | `retro` | `/retro` | Reviews a session and suggests changes to checks, instructions, skills, and tools that would make future sessions better. `land` uses it for its retro. |
 
-Default reviewers: GPT Sol 6.1. Council: Claude Opus 5.5 and GPT Sol 6.1.
+Default reviewers: GPT Sol 6.2 (high reasoning). Council: Claude Opus 5.5 and GPT Sol 6.2, both at high reasoning.
 
 ## Guides
 
