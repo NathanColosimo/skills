@@ -28,9 +28,7 @@ happens, drop it.
 
 ## 3. Write the smallest fix
 
-- Follow `standards` sections 1 and 2: reuse what the base branch and the
-  project's libraries already have, and prefer deleting or narrowing code to
-  adding it.
+- Apply `standards` sections 1 and 2 to the fix.
 - Add no machinery from `standards` section 5 unless the fix is impossible
   without it. If you add one, name the problem from step 1 that comes back
   without it.

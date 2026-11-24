@@ -28,8 +28,8 @@ It gives you permission to:
 3. **Simplify and get review** with `review-loop`, using its default
    reviewers unless the user named others. It runs the `standards` simplify
    guide before the first round and after the last.
-4. **Rebase** onto the latest base. Redo the checks and the proof for any
-   behavior that simplifying, review, or the rebase changed.
+4. **Rebase** onto the latest base and re-run the checks. Redo the proof for
+   any behavior that simplifying, review, or the rebase changed.
 5. **File the PR** with `pr-writing`.
 6. **Babysit it** with `babysit-pr`. Fix real findings and CI failures, and
    prove each fix before you push it.

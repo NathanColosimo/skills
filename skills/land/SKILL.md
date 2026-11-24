@@ -72,17 +72,17 @@ minutes. If you have no access, list exactly what the user should check.
 If the deploy fails or production looks worse:
 
 1. **Alert the user right away,** with the harness's notification tool if it
-   has one, and its question tool.
+   has one.
 2. **Start the fix in parallel.** Give a subagent the evidence: the error, the
    deploy, the merge commit, and when it started. It follows the
    `diagnosing-bugs` guide in `standards` and opens a fix PR. It doesn't
    merge.
-3. **Give the options,** with your recommendation first: revert the merge,
-   roll back the deploy, wait for the fix, or accept it. Say who is affected
-   and how fast each option takes effect.
-
-Don't revert or roll back until the user answers, unless they already said
-to.
+3. **Decide what to do now.** If the user already said to revert or roll
+   back in this case, do it. Otherwise ask with the harness's question tool,
+   and don't revert or roll back until they answer. Give the options with
+   your recommendation first: revert the merge, roll back the deploy, wait
+   for the fix, or accept it. Say who is affected and how fast each option
+   takes effect.
 
 ## 5. Finish the chores
 
