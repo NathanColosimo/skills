@@ -47,7 +47,8 @@ unresolved threads, PR closed), and 2 on bad input.
 
 - `ready` (default): required checks green, no unresolved threads, and not
   behind the base.
-- `green`: required checks only.
+- `green`: required checks only. A PR with no checks at all is green after a
+  minute.
 - `any-change`: exit on the first event.
 
 In Claude Code, run it with the Monitor tool (`timeout_ms: 3600000`) so each
