@@ -5,8 +5,8 @@ description: Code quality standards for writing, simplifying, reviewing, testing
 
 # Standards
 
-These rules apply to every change. They are judgment calls, not lint rules, so
-think about each one in context.
+These rules apply to every change. Use judgment, and think about each one in
+context.
 
 The repo's own conventions, lint config, and instruction files come first.
 Where they conflict with this skill, the repo wins. If the repo has its own
@@ -22,7 +22,7 @@ Every change has two goals, and the second matters as much as the first:
 A change that meets the first goal by hurting the second is not done.
 
 There are three modes. Each is scoped to the diff and the code it touches.
-Unrelated code is a follow-up, not part of this change.
+Unrelated code is a follow-up.
 
 - **Writing:** follow the rules while you make the change.
 - **Simplify pass:** once the change works, follow `guides/simplify/GUIDE.md`

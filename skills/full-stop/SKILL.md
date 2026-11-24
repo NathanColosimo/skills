@@ -14,9 +14,8 @@ testing without asking, except anything that merges.
 
 ## No merging
 
-You may commit, push, rebase, fix conflicts, and use `--force-with-lease` on
-this task's branch. Never merge, enable auto-merge, enter a merge queue, push
-to the default branch, bypass branch protection, or delegate any of those.
+Never merge, enable auto-merge, enter a merge queue, push to the default
+branch, bypass branch protection, or delegate any of those.
 
 Before you start, turn off auto-merge and take the PR out of any merge queue.
 Check again before each push, and report what you changed. If you can't stop
@@ -37,8 +36,6 @@ Then give one verdict:
   that is the real blocker.
 - **Blocked:** what prevents readiness, what you tried, and what is needed.
   Follow full-send's rules for asking the user.
-
-If someone else merged it, report that instead.
 
 Report the PR link, final head, verdict, proof, review outcome, and remaining
 risks, and whether the PR is still open and unmerged. If it is, the user can

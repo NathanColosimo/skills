@@ -36,9 +36,9 @@ deleting data. Ask first.
    - a flaky test or infrastructure failure: re-run it once;
    - kicked from the queue because another PR failed: queue it again.
 
-   Prove any fix that changes behavior. Stop after three failed attempts, or as soon as it needs a decision you
-   can't make with confidence, such as a conflict where both sides changed
-   behavior.
+   Prove any fix that changes behavior. Stop after three failed attempts, or
+   as soon as it needs a decision you can't make with confidence, such as a
+   conflict where both sides changed behavior.
 
 ## 2. Deploy
 
@@ -100,7 +100,7 @@ issues for what the user would otherwise still have to do:
   for.
 - **Cleanup:** delete the merged branch if the repo doesn't.
 
-Write every comment with `pr-writing`. Don't start new work beyond these.
+Write every comment with `pr-writing`.
 
 ## 6. Retro
 

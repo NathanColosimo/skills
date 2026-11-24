@@ -8,8 +8,7 @@ disable-model-invocation: true
 
 Find changes to the agent's **environment** that would make future sessions
 faster or less error-prone: the repo's checks and instruction files, the
-user's skills, and the agent's tools and access. Fixing the session's code is
-a different job.
+user's skills, and the agent's tools and access.
 
 ## 1. Read the session
 
@@ -27,9 +26,9 @@ from the user.
 
 - **A check.** Could a lint rule, type, test, pre-commit hook, or CI job have
   caught it? Read the repo's check commands and CI first. A check that exists
-  but isn't wired up, or doesn't block, is the finding. So is a repo with no guardrail at all.
-  A mechanical mistake (a banned API, an import shape, a file location) gets
-  a check, not a written rule.
+  but isn't wired up, or doesn't block, is the finding. So is a repo with no
+  guardrail at all. A mechanical mistake (a banned API, an import shape, a
+  file location) gets a check, not a written rule.
 - **A review rule.** Judgment calls no check can enforce go in the repo's
   standards file, or the `standards` skill if it has none. The reviewer has
   the least context pressure, so rules belong there, not in instructions the

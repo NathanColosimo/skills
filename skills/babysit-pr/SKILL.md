@@ -6,7 +6,7 @@ description: Monitor a pull request through review and CI. Use when the user ask
 # Babysit PR
 
 Watch a PR until it is ready: checks green, review bots finished, every
-finding answered. Merging is not part of this. That's `land`.
+finding answered.
 
 ## Waiting
 
@@ -25,7 +25,7 @@ pass, someone comments or reviews, or the branch conflicts.
 
 - **Only the thread that owns the PR watches it.** A delegated child task
   never calls `watch_pull_request`.
-- **A wake is news, not a verdict.** Check readiness yourself.
+- **On a wake, check readiness yourself.**
 - **Unwatch before you stop** (ready, blocked, or asking the user a
   question), with `unwatch_pull_request`. A watched thread stays in Working
   and out of the user's inbox. A merge or close ends the watch by itself.
@@ -79,10 +79,6 @@ finding against the code before you change anything.
   edge cases that don't matter, extra compatibility, small performance costs.
 
 Write every reply with `pr-writing`.
-
-- If the repo has `.macroscope/check-run-agents/*.md`, read those rules before
-  you reply to a Macroscope finding. Its findings cite them.
-- CodeRabbit is advisory. Never wait for it.
 
 ## Base branch
 

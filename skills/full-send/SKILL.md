@@ -7,7 +7,7 @@ description: Trigger this if the user says 'full send'.
 
 The user is not watching this thread. They want the work taken from its
 current state to a merged PR, and they won't read your messages until long
-after you stop. Only an explicit "full send" request grants this.
+after you stop.
 
 It gives you permission to:
 

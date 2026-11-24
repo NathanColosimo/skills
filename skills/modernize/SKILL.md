@@ -37,8 +37,6 @@ lines:
 - Did the base make parts of the PR unnecessary (shims, wrappers, branches for
   cases that can't happen anymore)? Delete them, following `standards`.
 
-"Git reports no conflicts" doesn't make a PR current.
-
 ## 3. Choose before pushing
 
 - **MODERNIZE:** the goal is still useful and the implementation is still the
@@ -57,8 +55,7 @@ spent isn't a reason to keep a PR alive.
 
 For MODERNIZE:
 
-1. Work in a clean worktree at the recorded PR head. Existing changes in the
-   user's worktree are theirs.
+1. Work in a clean worktree at the recorded PR head.
 2. Rebase onto the freshly fetched base. If the PR is in a stack, restack it
    with `stacked-prs` instead, which also covers changing its base.
 3. Resolve each conflict by the PR's intent and the base's newer rules. If a
@@ -68,8 +65,8 @@ For MODERNIZE:
    intended behavior disappeared, and nothing already landed came back.
 5. Run the checks for the touched area. Tell real failures apart from
    pre-existing and infrastructure ones.
-6. Push with `--force-with-lease` against the head SHA you recorded, never a
-   plain force push. If the lease fails, fetch and reassess.
+6. Push with `--force-with-lease` against the head SHA you recorded. If the
+   lease fails, fetch and reassess.
 
 ## Report
 

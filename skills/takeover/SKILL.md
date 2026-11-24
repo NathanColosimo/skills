@@ -18,8 +18,7 @@ defend an implementation just because someone already built it.
 3. **Keep the credit.** Preserve Git authorship and co-author trailers. Name
    the original contributors in the PR description and link the original PR.
    If the work will be squashed, keep human author and co-author credit in the
-   merge commit, using verified identities, not guessed emails. Naming a model
-   doesn't replace crediting a person.
+   merge commit, using verified identities, not guessed emails.
 4. **Bring it up to date** with `modernize`. Rework what the same goal needs,
    not unrelated features. Run the `standards` simplify guide on the inherited
    diff without dropping intended behavior. Check the source PR again before

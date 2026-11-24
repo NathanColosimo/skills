@@ -88,7 +88,6 @@ the brief.
 ## 4. Answer findings
 
 Check every finding against the code yourself, and set its severity yourself.
-A reviewer's label is a suggestion.
 
 - **Agree:** make the smallest fix. Narrow a condition before adding a guard,
   and add a guard before adding a mechanism.

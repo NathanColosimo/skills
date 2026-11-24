@@ -9,8 +9,7 @@ A stack is a chain of PRs where each PR's base is the branch of the PR below
 it, so each PR shows only its own layer. GitHub supports stacks natively: it
 runs CI on every layer, merges any bottom slice in one step, and rebases and
 retargets the PRs above after a merge. Always use native stacks through the
-`gh stack` extension (`gh extension install github/gh-stack`). Don't chain PRs
-by hand.
+`gh stack` extension (`gh extension install github/gh-stack`).
 
 Use v0.3.0 or later (`gh extension list`, `gh extension upgrade stack`). Older
 versions replay already-merged commits and cause conflicts in files the layer

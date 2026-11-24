@@ -5,9 +5,6 @@ description: Write and post anything on a pull request for the user, including t
 
 # PR writing
 
-This covers the words on a PR: the branch name, the title, the description,
-and comments. Getting the change itself ready is not this skill's job.
-
 A reader should know from the title what the PR is for, and from the top of
 the description what it changes and how risky it is.
 
@@ -16,10 +13,10 @@ draft, show it to them first.
 
 ## Public repos
 
-Check everything you post for secrets and private details. Everything posted in a public repo is visible to anyone, forever. Check with
-`gh repo view --json visibility -q .visibility`. In a public repo, write only
-what someone reading the public code could already know. Keep these out of
-branch names, titles, descriptions, comments, and commit messages:
+Check everything you post for secrets and private details. In a public repo
+(`gh repo view --json visibility -q .visibility`), write only what someone
+reading the public code could already know. Keep these out of branch names,
+titles, descriptions, comments, and commit messages:
 
 - private names (repos, services, files, functions, config) and internal
   links (URLs, hostnames, dashboards, traces, tickets, chats);
