@@ -77,6 +77,39 @@ there are any.>
 ```
 
 - Leave out any section or line that would be empty.
+- Short sentences. Explain any term a newcomer wouldn't know. Say what a user
+  saw, with numbers and error messages, not which functions changed.
+- Separate what you verified from what you believe.
+- **Type** names both when the PR does two related things ("security fix +
+  refactor").
+- **Risk** rates what a bug in this change could break, not how sure you are.
+  Auth, payments, data, migrations, and security checks are High. Docs, tests,
+  and isolated changes are Low.
+- Stack and history notes go in **Depends on** or Notes, not in Why.
+- If the repo has a PR template, put everything down to **Depends on** above
+  it, and fill in the template for the rest.
+
+The first line tells the reviewer how much of a person is behind the change:
+
+- `<role>` matches what the user did. Gave the task and approved the approach:
+  nothing. Wrote a spec you implemented: `, following their spec`. Worked out
+  the design with you: `, who shaped the solution`. Picking between options
+  you offered is approving, not shaping.
+- Write `has reviewed it` only when the user says so.
+- `<model>` is the public model name the harness reports, plus any subagent
+  models that wrote part of the change. If unknown, write "an AI agent".
+- `<handle>` comes from `gh api user -q .login` when the signed-in account is
+  the user's own. Otherwise ask.
+- This line replaces any "Generated with" footer.
+
+## Evidence
+<Captures, output, or measurements. See "Evidence".>
+
+## Notes
+- <Only what a reviewer needs: trade-offs, what's untested, follow-ups.>
+```
+
+- Leave out any section or line that would be empty.
 - **Type** names both when the PR does two related things ("security fix +
   refactor").
 - **Risk** rates what a bug in this change could break, not how sure you are.
