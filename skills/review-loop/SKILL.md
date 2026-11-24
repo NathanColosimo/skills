@@ -6,8 +6,8 @@ description: Review a change with other models in a loop until a stop condition 
 # Review loop
 
 Get review from other models, answer each finding, and repeat until the stop
-condition is met. You own the change. Reviewers advise. Push back when they are
-wrong or overreaching.
+condition is met. You own the change. Reviewers advise, so push back when they
+are wrong or overreaching.
 
 ## 1. Reviewers and stop condition
 
@@ -16,51 +16,46 @@ wrong or overreaching.
 - Default, and "sol loop": **GPT Sol 6.2** at high reasoning.
 - "council": **Claude Opus 5.5** at high reasoning and **GPT Sol 6.2** at high
   reasoning, in parallel.
-- If the user names models, use those instead.
+- If the user names models, use those instead, at high reasoning.
 
-Run every reviewer at high reasoning effort. Resolve the model IDs at runtime;
-do not hardcode them. If a reviewer is unavailable, report that and stop. Do not
-substitute another model.
+Resolve the model IDs at runtime. If a reviewer is unavailable, report that
+and stop. Don't substitute another model.
 
-**Stop condition:** use the user's, for example "until both approve", "3
-rounds", "until every score is 9 or higher", or "until no blockers". The
-default is that every reviewer approves with no open blocker or should that
-names a scenario a user can hit. Scores are informational. Don't chase a
-score unless the user asked for one: each extra round finds rarer cases, and
-the diff grows to handle them.
+**Stop condition:** the user's, such as "until both approve", "3 rounds", or
+"until every score is 9 or higher". By default, stop when every reviewer
+approves with no open blocker or should that names a scenario a user can hit.
+Don't chase a score unless the user asked for one: each extra round finds
+rarer cases, and the diff grows to handle them.
 
-**Budget:** 3 rounds by default. Go up to 5 only for security, auth,
-permissions, data loss, or concurrency while a blocker or should is still open
-with evidence, or when the user asks. Stop early when a round returns only
-nits. Running out of budget is not approval.
+**Budget:** 3 rounds. Go up to 5 only when the user asks, or for security,
+auth, permissions, data loss, or concurrency while a blocker or should is
+still open with evidence. Stop early when a round returns only nits. Running
+out of budget is not approval.
 
 ## 2. Before round 1
 
-1. Run `git status --short`. Do not stash, discard, or include unrelated
-   changes. If the change's paths don't separate cleanly from other work, stop
-   and ask.
-2. Find the base after `git fetch origin`:
-   - PR: `gh pr view <n> --json baseRefName,headRefOid`, then
-     `git merge-base HEAD origin/<baseRefName>`.
-   - Local: `git merge-base HEAD origin/<default-branch>`.
-3. Fix what you already know about: outstanding PR comments, failing checks,
-   known bugs. Do not send reviewers code you know is broken.
-4. Run the `standards` simplify pass (`guides/simplify/GUIDE.md`) on the diff
-   yourself, then run the checks that cover it.
-5. Write the intent and what is out of scope in 1-2 sentences. The intent
-   names the problems the change fixes, from the simplify guide's step 1.
-6. Record the size: `git diff --shortstat <base>`.
+1. Run `git status --short`. Don't stash, discard, or include unrelated
+   changes. If the change doesn't separate cleanly from other work, stop and
+   ask.
+2. Find the base after `git fetch origin`. For a PR:
+   `gh pr view <n> --json baseRefName`, then
+   `git merge-base HEAD origin/<baseRefName>`. Otherwise use the default
+   branch.
+3. Fix what you already know about: open PR comments, failing checks, known
+   bugs. Then run the `standards` simplify guide on the diff and the checks
+   that cover it.
+4. Write the intent (the problems the change fixes) and what is out of scope,
+   in 1-2 sentences.
+5. Record the size: `git diff --shortstat <base>`.
 
 ## 3. Start reviewers
 
-In T3 Code, call `orchestrator_capabilities` once, then one `delegate_task` per
-reviewer (`role: "review"`, `mode: "async"`), with a new `clientRequestId`
-each round. Outside T3, use the harness's subagent tool on the right model. In
-Claude Code, a Claude reviewer can be a native `Agent` with the model set.
+In T3 Code, call `orchestrator_capabilities` once, then one `delegate_task`
+per reviewer (`role: "review"`, `mode: "async"`), with a new `clientRequestId`
+each round. Elsewhere, use the harness's subagent tool on the right model.
 
-Do not edit the files under review while reviewers run. Wait for the
-completion notice; do not poll. A timeout, error, or empty reply is not
-approval.
+Don't edit the files under review while reviewers run. Wait for the completion
+notice; don't poll. A timeout, error, or empty reply is not approval.
 
 Round 1 brief (delegates get no history):
 
@@ -93,54 +88,49 @@ the brief.
 ## 4. Answer findings
 
 Check every finding against the code yourself, and set its severity yourself.
-A reviewer's label is a suggestion.
 
-- **Agree:** make the smallest fix. Prefer deleting or narrowing code over a
-  new helper, option, guard, or test.
-- **Disagree:** say why, with evidence (file:line, a test, output).
+- **Agree:** make the smallest fix. Narrow a condition before adding a guard,
+  and add a guard before adding a mechanism.
+- **Disagree:** say why, with evidence (`file:line`, a test, output).
 - **Decline:** out of scope or a nit. One line, listed as a follow-up.
 
-Push back when a reviewer is overreaching. Decline, with a reason:
+Decline overreach, with a reason:
 
-- requests that break `standards`, such as adding a compatibility shim, a
-  wrapper, a defensive branch for a case that can't happen, or a test that
-  restates the code;
+- anything that breaks `standards`, such as a shim, a wrapper, a guard for a
+  case that can't happen, or a test that restates the code;
 - hypothetical paths the intent doesn't cover;
 - style preferences the repo doesn't share;
-- anything that grows the diff when the change is correct and complete without
-  it. Make it a follow-up PR instead.
+- anything that grows the diff when the change is correct and complete
+  without it. That's a follow-up PR.
 
 Never agree just to end the loop. After fixing, re-run the checks and
-`git diff --shortstat <base>`. If review grew the diff, check each addition
-against the scenario that justified it, and revert the ones without one. A
-fix for a real scenario should be the smallest one: a narrowed condition
-before a new guard, a guard before a new mechanism.
+`git diff --shortstat <base>`. If review grew the diff, revert every addition
+that no scenario justifies.
 
-Keep a ledger: id, reviewer, severity, outcome (fixed / disagree / declined),
-and the evidence for each.
+Keep a ledger: id, reviewer, severity, outcome (fixed, disagreed, declined),
+and the evidence.
 
 ## 5. Next round
 
-Start a round only if budget remains and the stop condition isn't met. Send
-the round 1 brief, the ledger, and the change since the last round. Ask each
-reviewer to check open ids and changed code only, and mark each old id
+Start another round only if budget remains and the stop condition isn't met.
+Send the round 1 brief, the ledger, and the change since the last round. Ask
+each reviewer to check only open ids and changed code, and to mark each old id
 `resolved` or `still open: <reason>`.
 
-If a reviewer still disputes an item after two replies, stop arguing. Show
+If a reviewer still disputes an item after two replies, stop arguing. Give
 both sides in 2-3 lines each and let the user decide.
 
 ## 6. Finish
 
-After the last round, run the simplify guide on the whole diff again. Review
-fixes pile up, and nothing else removes them. If that pass changed behavior,
-re-run the checks and send one short confirmation round on the changed code
-only.
+Run the simplify guide on the whole diff again, because review fixes pile up
+and nothing else removes them. If that changed behavior, re-run the checks and
+send one short confirmation round on the changed code.
 
-Do not push during the loop. Push afterwards only if the user asked you to
+Don't push during the loop. Push afterwards only if the user asked you to
 push, ship, or update the PR.
 
-If the work has a PR, put this section in its description, right after
-Evidence. Edit the description; do not post a comment.
+This section goes in the PR description, after Evidence. Edit it in now if
+the PR exists, or add it when the PR is filed:
 
 ```markdown
 ## Review
@@ -150,8 +140,8 @@ Evidence. Edit the description; do not post a comment.
 | GPT Sol 6.2 | 7/10 | 9/10, approved |
 ```
 
-Write `no score` when a reviewer gave none. Never invent one.
+Write `no score` when a reviewer gave none.
 
-Report: the reviewers, the rounds, what changed because of review, the diff
+Report the reviewers, the rounds, what changed because of review, the diff
 size before review, after review, and after the final simplify pass, and each
 declined or disputed finding with its reason.

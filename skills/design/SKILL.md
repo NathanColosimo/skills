@@ -15,12 +15,9 @@ guide points to another guide by name, read `guides/<that name>/GUIDE.md`.
 The animation values all guides share (frequency, easing, durations, springs)
 are in `guides/review-animations/STANDARDS.md`.
 
-The project's own design system, tokens, and components come first. A guide
-shapes how you use them. It doesn't replace them.
+The project's own design system, tokens, and components come first.
 
 ## Rules for every screen
-
-These apply whichever guide you use.
 
 - **Every element earns its space.** Each heading, button, status line, and
   border must help the user understand or do something. Remove headings that

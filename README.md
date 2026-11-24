@@ -11,8 +11,8 @@ work; see [Attribution](#attribution) at the end.
 | `full-stop` | "full stop" | Same as `full-send`, but stops when the PR is ready for me to merge. |
 | `land` | "land" | Merges a finished PR (through the merge queue if there is one), watches the deploy and production, closes related issues and PRs, and runs a retro only when something is worth fixing. |
 | `review-loop` | "review loop", "sol loop", "council" | Reviews with other models in a loop until a stop condition, pushes back on overreach, and ends with a simplify pass. |
-| `pr-writing` | "file a PR" (and automatic for comments) | Writes PR titles, descriptions, and comments: says who did what, leads with the problem, shows evidence that fits the change, and keeps private details out of public repos. |
-| `babysit-pr` | "babysit" | Watches a PR through CI and review bots, and fixes real findings. |
+| `pr-writing` | "file a PR" (and automatic for comments) | Writes branch names, PR titles, descriptions, and comments. Titles say the purpose, descriptions open with In short, type, and risk, and private details stay out of public repos. |
+| `babysit-pr` | "babysit" | Watches a PR through CI and review bots until it's ready, and fixes real findings. |
 | `modernize` | "modernize" | Rebases an old PR and decides whether it should still exist. |
 | `stacked-prs` | "stacked PRs", "stack" | Creates, restacks, and merges GitHub's native stacked PRs with `gh stack`. Restacks after squash merges. |
 | `takeover` | "take over" | Finishes someone else's PR, branch, or thread, and keeps their credit. |
