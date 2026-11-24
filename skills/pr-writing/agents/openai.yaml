@@ -1,4 +1,4 @@
 interface:
   display_name: "PR Writing"
-  short_description: "Write PR descriptions and comments that show evidence"
+  short_description: "Write clear PR titles, descriptions, and comments"
   default_prompt: "Use $pr-writing to file this PR or post this comment on my behalf."
