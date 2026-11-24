@@ -45,9 +45,9 @@ It prints one line per real event. It exits 0 when the `--until` condition is
 met or the PR merges, 1 when it needs you (a required check failed, conflicts,
 unresolved threads, PR closed), and 2 on bad input.
 
-- `ready` (default): required checks green, Greptile or Macroscope reviewed
-  the head, and no unresolved threads.
-- `green`: required checks only, for repos without Greptile or Macroscope.
+- `ready` (default): required checks green, no unresolved threads, and not
+  behind the base.
+- `green`: required checks only.
 - `any-change`: exit on the first event.
 
 In Claude Code, run it with the Monitor tool (`timeout_ms: 3600000`) so each
