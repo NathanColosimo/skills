@@ -5,38 +5,30 @@ description: Take over existing work. Use when the user asks to take over a PR, 
 
 # Takeover
 
-Take responsibility for finishing the original goal while preserving the
-original contributors' credit. Do not defend an implementation just because
-another agent already built it.
+Finish the original goal, and keep the original contributors' credit. Don't
+defend an implementation just because someone already built it.
 
-Read the source PR, branch, or thread, including review findings and the user's
-later corrections. Resolve the handoff to the actual code and current head,
-and account for uncommitted work. Treat the handoff as context, not proof.
-
-For a replacement PR, import the original commits onto a new branch and add
-your fixes separately. Honor an explicitly requested in-place or stacked
-continuation instead. Do not overwrite unrelated work or change the original
-PR without authorization.
-
-Preserve Git authorship and existing co-author trailers. Credit the original
-contributors in the PR description and link the original PR when there is one.
-If the work will be squashed, preserve human author/co-author credit in the
-merge commit too, using verified identities rather than guessed emails. Model
-attribution is not a substitute for contributor credit.
-
-Use `modernize` to update the continuation against its intended base and
-current architecture. Rework what is necessary to finish the same goal, not
-unrelated features. Run the `standards` simplify pass on the inherited diff
-without dropping intended behavior or surfaces. Recheck the source PR too: it may have improved while
-you were working.
-
-Independently verify the original failure and realistic workflows, following
-repository guidance and permissions. Green mocked tests do not prove the user
-experience works. State what remains unverified.
-
-When the requested finish includes a PR, use `pr-writing` to file or update it,
-then `babysit-pr` rather than stopping at creation. Use it
-for replies too. Merge or close the original PR only when authorized.
+1. **Read the source:** the PR, branch, or thread, with its review findings
+   and the user's later corrections. Find the actual code and current head,
+   and account for uncommitted work. A handoff note is context, not proof.
+2. **Start the continuation.** For a replacement PR, import the original
+   commits onto a new branch and add your fixes as separate commits. If the
+   user asked for an in-place or stacked continuation, do that. Don't
+   overwrite unrelated work or change the original PR without permission.
+3. **Keep the credit.** Preserve Git authorship and co-author trailers. Name
+   the original contributors in the PR description and link the original PR.
+   If the work will be squashed, keep human author and co-author credit in the
+   merge commit, using verified identities, not guessed emails. Naming a model
+   doesn't replace crediting a person.
+4. **Bring it up to date** with `modernize`. Rework what the same goal needs,
+   not unrelated features. Run the `standards` simplify guide on the inherited
+   diff without dropping intended behavior. Check the source PR again before
+   you finish: it may have moved.
+5. **Verify it yourself.** Reproduce the original failure and try realistic
+   workflows. Say what stays unverified.
+6. **File it,** when the request includes a PR, with `pr-writing`, then stay
+   with it using `babysit-pr`. Merge or close the original PR only with
+   permission.
 
 Report what you inherited, what you changed, how you verified it, how credit
-was preserved, and any remaining decision.
+was kept, and anything left to decide.

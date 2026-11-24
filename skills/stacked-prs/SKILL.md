@@ -6,16 +6,15 @@ description: GitHub's native stacked pull requests and the `gh stack` CLI. Cover
 # Stacked PRs
 
 A stack is a chain of PRs where each PR's base is the branch of the PR below
-it, so each PR shows only its own layer. GitHub supports stacks natively. It
+it, so each PR shows only its own layer. GitHub supports stacks natively: it
 runs CI on every layer, merges any bottom slice in one step, and rebases and
-retargets the PRs above after a merge, squash merges included. Always use
-native stacks through the `gh stack` extension
-(`gh extension install github/gh-stack`). Don't chain PRs by hand.
+retargets the PRs above after a merge. Always use native stacks through the
+`gh stack` extension (`gh extension install github/gh-stack`). Don't chain PRs
+by hand.
 
-Use v0.3.0 or later. Check with `gh extension list`, and run
-`gh extension upgrade stack` if it's older. Before v0.3.0, `sync` and
-`rebase` replayed already-merged commits when a local branch was out of date,
-which caused conflicts in files the layer never touched.
+Use v0.3.0 or later (`gh extension list`, `gh extension upgrade stack`). Older
+versions replay already-merged commits and cause conflicts in files the layer
+never touched.
 
 Rebasing a stack, and the lease-protected force-pushes that `gh stack push`
 and `gh stack sync` do, are pre-authorized.
@@ -28,26 +27,15 @@ and then hangs. So:
 - Run `gh stack view --json`, never bare `view`.
 - Run `gh stack submit --auto --open`. That opens ready PRs, not drafts.
 - Always pass explicit arguments to `init`, `add`, and `checkout`.
-- Never run `gh stack modify` or `gh stack switch`. They have no
-  non-interactive mode.
+- Never run `gh stack modify` or `gh stack switch`. They are interactive only.
 - Never use `gh pr merge` or `gh pr edit --base` on a stacked PR.
 - Exit codes: 3 is a rebase conflict, 7 is a rebase already in progress, 8 is
   locked (retry in a few seconds), and 9 means stacks aren't enabled on the
   repo (see "Fallback").
-- `gh stack <command> --help` is authoritative. `gh stack help <command>`
-  prints the top-level help instead.
+- For help, run `gh stack <command> --help`. `gh stack help <command>` prints
+  the top-level help instead.
 - Turn on `git config rerere.enabled true` so conflict resolutions get reused
   across layers.
-- `sync` and `rebase` stop and ask about a base change in one case only: the
-  bottom PR's base branch was deleted without merging, and GitHub retargeted
-  the stack onto the trunk. The layers above still carry the deleted base's
-  commits. Settle it without asking the user:
-  - **The base's PR is closed:** it was dropped on purpose. Rerun with
-    `--accept-base-change`, which removes its commits from the layers above,
-    then run the checks and fix any layer that still relied on its code.
-  - **The base's PR is still open:** the branch was deleted by mistake.
-    Restore it with `git push origin <its PR's headRefOid>:refs/heads/<branch>`
-    and sync again. Nothing is dropped.
 
 ## Is it a native stack?
 
@@ -62,8 +50,8 @@ chain. Link it bottom to top with `gh stack link --base <trunk> <bottom>
 
 ## Create
 
-1. Plan the layers before writing code. Put one concern in each layer, with
-   foundations at the bottom. Follow the repo's branch naming.
+1. Plan the layers before writing code: one concern per layer, foundations at
+   the bottom.
 2. `gh stack init <first-branch>`, then commit. For each next layer,
    `gh stack add <branch>`, then commit. Stage files deliberately so each
    change lands in the layer it belongs to.
@@ -77,7 +65,9 @@ layer's change on a higher branch.
 ## Keep it current
 
 Run `gh stack sync` after any merge, or when the trunk moves. It fetches,
-detects squash merges, replays the remaining layers with `--onto`, and pushes.
+detects squash merges, replays the remaining layers, and pushes. After any
+rewrite, run the checks for every changed layer. In a worktree, `rebase` and
+`sync` skip dirty worktrees.
 
 - **Conflict (exit 3):** sync has already restored every branch. Run
   `gh stack rebase`, resolve, `git add`, then `gh stack rebase --continue` and
@@ -94,10 +84,16 @@ detects squash merges, replays the remaining layers with `--onto`, and pushes.
   its updated parent:
   `git rebase --onto <parent> <old parent head> <branch>`, then
   `git push --force-with-lease=<branch>:<its head before the rebase>`.
-
-After any rewrite, run the checks for every changed layer before you call it
-ready. In a worktree, `rebase` and `sync` update the clean worktrees and skip
-the dirty ones.
+- **It stops to ask about a base change:** the bottom PR's base branch was
+  deleted without merging, and GitHub retargeted the stack onto the trunk.
+  Settle it without asking the user:
+  - **The base's PR is closed:** it was dropped on purpose. Rerun with
+    `--accept-base-change`, which removes its commits from the layers above.
+    Then run the checks and fix any layer that still relied on its code.
+  - **The base's PR is still open:** the branch was deleted by mistake.
+    Restore it with
+    `git push origin <its PR's headRefOid>:refs/heads/<branch>` and sync
+    again.
 
 ## Merge
 
@@ -106,16 +102,15 @@ PR below it, all or nothing. Pass the stack number instead to merge the whole
 stack. Pass the repo's method (`--squash` in a squash-only repo). With a merge
 queue, the stack is queued and the queue picks the method.
 
-- **Before:** every selected PR is open, not a draft, green, and approved under
-  the repo's rules. Check each layer on its own.
-- **After:** confirm each one shows `MERGED`, run `gh stack sync --prune`, then
-  check CI on the layers that remain. Don't delete branches or retarget PRs by
-  hand.
-- **Sync right away, even if the next PR looks fine.** GitHub retargets it to
-  the trunk but doesn't always rebase it, so its diff can show the merged
-  layers' changes again. Don't hand-build merge commits to avoid sync's
-  force-push: they break the linear chain `gh stack merge` needs ("not a
-  linear descendant").
+- **Before:** every selected PR is open, not a draft, green, and approved
+  under the repo's rules. Check each layer by itself.
+- **After:** confirm each one shows `MERGED`, run `gh stack sync --prune`
+  right away, then check CI on the layers that remain. Sync even if the next
+  PR looks fine: GitHub retargets it to the trunk but doesn't always rebase
+  it, so its diff can show the merged layers again.
+- Don't delete branches, retarget PRs, or build merge commits by hand. A
+  merge commit you built breaks the linear chain `gh stack merge` needs ("not
+  a linear descendant").
 
 ## Fallback: stacks unavailable (exit 9)
 
