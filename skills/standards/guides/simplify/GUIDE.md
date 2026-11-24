@@ -28,13 +28,12 @@ happens, drop it.
 
 ## 3. Write the smallest fix
 
-- Prefer deleting or narrowing code to adding it.
-- Reuse what the base branch and the project's libraries already have: an
-  option, a flag, an existing hook, a plain HTML attribute.
-- Add no machinery from `standards` section 5 (a new module, state machine,
-  counter, lock, retry, queue, table, compatibility path, wrapper) unless the
-  fix is impossible without it. If you add one, name the problem from step 1
-  that comes back without it.
+- Follow `standards` sections 1 and 2: reuse what the base branch and the
+  project's libraries already have, and prefer deleting or narrowing code to
+  adding it.
+- Add no machinery from `standards` section 5 unless the fix is impossible
+  without it. If you add one, name the problem from step 1 that comes back
+  without it.
 - One focused regression test per named problem. No matrix of orderings and
   races.
 

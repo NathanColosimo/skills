@@ -16,10 +16,10 @@ are wrong or overreaching.
 - Default, and "sol loop": **GPT Sol 6.2** at high reasoning.
 - "council": **Claude Opus 5.5** at high reasoning and **GPT Sol 6.2** at high
   reasoning, in parallel.
-- If the user names models, use those instead.
+- If the user names models, use those instead, at high reasoning.
 
-Every reviewer runs at high reasoning. Resolve the model IDs at runtime. If a
-reviewer is unavailable, report that and stop. Don't substitute another model.
+Resolve the model IDs at runtime. If a reviewer is unavailable, report that
+and stop. Don't substitute another model.
 
 **Stop condition:** the user's, such as "until both approve", "3 rounds", or
 "until every score is 9 or higher". By default, stop when every reviewer
@@ -82,7 +82,8 @@ D1 [should] <file>:<lines> <what to delete and why the intent still holds>
 ```
 
 Find the standards path with `ls ~/.agents/skills/standards/SKILL.md
-~/.claude/skills/standards/SKILL.md`.
+~/.claude/skills/standards/SKILL.md`. If neither exists, paste the rules into
+the brief.
 
 ## 4. Answer findings
 
@@ -129,7 +130,8 @@ send one short confirmation round on the changed code.
 Don't push during the loop. Push afterwards only if the user asked you to
 push, ship, or update the PR.
 
-If the work has a PR, edit this section into its description, after Evidence:
+This section goes in the PR description, after Evidence. Edit it in now if
+the PR exists, or add it when the PR is filed:
 
 ```markdown
 ## Review

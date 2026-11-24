@@ -97,5 +97,5 @@ Write every reply with `pr-writing`.
 - If another PR makes this one obsolete, stop, tell the user, and ask before
   closing it.
 
-Stop when `pr-wait` exits 0, or in T3 Code when the PR is ready on its latest
-head. Report that it is ready.
+Stop when `pr-wait` exits 0, or in T3 Code when `full-send`'s merge gate
+passes on the latest head. Report that the PR is ready.

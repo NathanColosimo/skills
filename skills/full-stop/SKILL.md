@@ -41,5 +41,5 @@ Then give one verdict:
 If someone else merged it, report that instead.
 
 Report the PR link, final head, verdict, proof, review outcome, and remaining
-risks, and say that the PR is still open and unmerged. The user can say
-"land" to merge it.
+risks, and whether the PR is still open and unmerged. If it is, the user can
+say "land" to merge it.

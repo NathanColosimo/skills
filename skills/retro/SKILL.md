@@ -27,7 +27,7 @@ from the user.
 
 - **A check.** Could a lint rule, type, test, pre-commit hook, or CI job have
   caught it? Read the repo's check commands and CI first. A check that exists
-  but isn't wired up is the finding. So is a repo with no guardrail at all.
+  but isn't wired up, or doesn't block, is the finding. So is a repo with no guardrail at all.
   A mechanical mistake (a banned API, an import shape, a file location) gets
   a check, not a written rule.
 - **A review rule.** Judgment calls no check can enforce go in the repo's

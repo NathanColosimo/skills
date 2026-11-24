@@ -25,7 +25,6 @@ and `gh stack sync` do, are pre-authorized.
 and then hangs. So:
 
 - Run `gh stack view --json`, never bare `view`.
-- Run `gh stack submit --auto --open`. That opens ready PRs, not drafts.
 - Always pass explicit arguments to `init`, `add`, and `checkout`.
 - Never run `gh stack modify` or `gh stack switch`. They are interactive only.
 - Never use `gh pr merge` or `gh pr edit --base` on a stacked PR.
@@ -51,12 +50,13 @@ chain. Link it bottom to top with `gh stack link --base <trunk> <bottom>
 ## Create
 
 1. Plan the layers before writing code: one concern per layer, foundations at
-   the bottom.
+   the bottom. Name the branches the way `pr-writing` says.
 2. `gh stack init <first-branch>`, then commit. For each next layer,
    `gh stack add <branch>`, then commit. Stage files deliberately so each
    change lands in the layer it belongs to.
-3. `gh stack submit --auto --open`. It generates the titles and bodies, so
-   rewrite each one with `pr-writing` (`gh pr edit`).
+3. `gh stack submit --auto --open`, which opens ready PRs without prompting.
+   It generates the titles and bodies, so rewrite each one with `pr-writing`
+   (`gh pr edit`).
 
 To change a lower layer, check it out (`gh stack checkout <branch>`), commit,
 then run `gh stack rebase --upstack` and `gh stack push`. Never commit a lower

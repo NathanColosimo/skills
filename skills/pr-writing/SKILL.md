@@ -160,5 +160,5 @@ The comment starts here.
   your recommendation. A finding: what is wrong, where, why it matters, and
   the smallest fix.
 
-After posting, confirm GitHub returned the comment's URL, and only then
-resolve the thread.
+After posting, confirm GitHub returned the comment's URL. Resolve a thread
+only after the reply that settles it has posted.

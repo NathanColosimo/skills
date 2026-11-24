@@ -32,12 +32,11 @@ deleting data. Ask first.
 3. Wait with `babysit-pr`'s watcher until GitHub reports it merged.
 4. If it doesn't merge, fix the obvious cause and try again:
    - a conflict with the new base: rebase and resolve it;
-   - a CI failure this PR caused: fix it, and prove any fix that changes
-     behavior;
+   - a CI failure this PR caused: fix it;
    - a flaky test or infrastructure failure: re-run it once;
    - kicked from the queue because another PR failed: queue it again.
 
-   Stop after three failed attempts, or as soon as it needs a decision you
+   Prove any fix that changes behavior. Stop after three failed attempts, or as soon as it needs a decision you
    can't make with confidence, such as a conflict where both sides changed
    behavior.
 
@@ -82,7 +81,8 @@ If the deploy fails or production looks worse:
    roll back the deploy, wait for the fix, or accept it. Say who is affected
    and how fast each option takes effect.
 
-Don't revert or roll back until the user answers.
+Don't revert or roll back until the user answers, unless they already said
+to.
 
 ## 5. Finish the chores
 

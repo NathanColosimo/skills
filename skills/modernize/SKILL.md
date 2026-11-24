@@ -60,7 +60,7 @@ For MODERNIZE:
 1. Work in a clean worktree at the recorded PR head. Existing changes in the
    user's worktree are theirs.
 2. Rebase onto the freshly fetched base. If the PR is in a stack, restack it
-   with `stacked-prs` instead.
+   with `stacked-prs` instead, which also covers changing its base.
 3. Resolve each conflict by the PR's intent and the base's newer rules. If a
    conflict shows a product or architecture disagreement, stop and reconsider
    the choice.

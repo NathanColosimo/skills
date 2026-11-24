@@ -26,7 +26,7 @@ Unrelated code is a follow-up, not part of this change.
 
 - **Writing:** follow the rules while you make the change.
 - **Simplify pass:** once the change works, follow `guides/simplify/GUIDE.md`
-  on the diff, then re-run the checks.
+  on the diff.
 - **Review:** check a diff against the rules and report findings. See "Review
   output".
 

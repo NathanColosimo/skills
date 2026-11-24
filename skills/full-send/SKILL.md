@@ -25,11 +25,12 @@ It gives you permission to:
 1. **Finish the change,** following `standards`. Branch first if you're on
    the default branch.
 2. **Prove it.** See "Proof".
-3. **Simplify.** Run the `standards` simplify guide on the full diff. Re-run
-   the checks, and redo the proof for any behavior the pass touched.
-4. **Get review** with `review-loop`, using its default reviewers unless the
-   user named others.
-5. **File the PR** with `pr-writing`, rebased onto the latest base.
+3. **Simplify and get review** with `review-loop`, using its default
+   reviewers unless the user named others. It runs the `standards` simplify
+   guide before the first round and after the last.
+4. **Rebase** onto the latest base. Redo the checks and the proof for any
+   behavior that simplifying, review, or the rebase changed.
+5. **File the PR** with `pr-writing`.
 6. **Babysit it** with `babysit-pr`. Fix real findings and CI failures, and
    prove each fix before you push it.
 7. **Land it** with `land` once the merge gate passes.
