@@ -10,7 +10,8 @@ Progress and errors that do not end the run go to stderr.
 
 --until
   green       required checks passed on the current head (every CI check when
-              the base branch requires none)
+              the base branch requires none). A head with no checks at all is
+              green once none has appeared for a minute.
   ready       green, no review thread is unresolved, and the branch is not
               behind its base (default)
   any-change  stop after the first poll that prints an event
@@ -62,6 +63,10 @@ STATE_DIR = Path.home() / ".local" / "state" / "pr-wait"
 # instead of replaying hours of comments as new events.
 STALE_STATE_SECONDS = 6 * 3600
 MAX_FAILED_POLLS = 10
+# Checks appear a few seconds after a push. A head with no checks counts as
+# green only after it has stayed empty this long, so a repo without CI still
+# finishes and a repo with CI is not called green before its checks register.
+NO_CHECKS_GRACE_SECONDS = 60
 TRANSIENT = re.compile(
     r"HTTP (5\d\d|429)|rate limit|timed? ?out|connection (reset|refused)|EOF|"
     r"temporar|could not resolve host|TLS handshake|Something went wrong",
@@ -235,6 +240,8 @@ class Watcher:
         self.events = 0
         self.required: set[str] | None = None
         self.prev_snapshot: list[tuple[str, str]] | None = None
+        # The head that had no checks, and when this watcher first saw it empty.
+        self.empty_since: tuple[str, float] | None = None
         self.pr_files: dict[str, set[str]] = {}
 
     def load(self) -> Json | None:
@@ -351,7 +358,12 @@ class Watcher:
                 link = checks[name]["link"]
                 fail_lines.append(f"{label} failed: {name} {link}")
                 self.emit(f"fail:{head}:{name}:{link}", fail_lines[-1])
-        gate_done = bool(gate) and all(bucket(n) != "pending" for n in gate)
+        if gate:
+            self.empty_since = None
+        elif self.empty_since is None or self.empty_since[0] != head:
+            self.empty_since = (head, time.monotonic())
+        no_checks = self.empty_since is not None and time.monotonic() - self.empty_since[1] >= NO_CHECKS_GRACE_SECONDS
+        gate_done = no_checks or (bool(gate) and all(bucket(n) != "pending" for n in gate))
         all_done = gate_done and all(c["bucket"] != "pending" for c in checks.values())
         # Checks appear a few seconds after a push. Two identical polls in a row
         # guard against calling a half-registered set of checks finished.
@@ -414,7 +426,7 @@ class Watcher:
             counts[c["bucket"]] = counts.get(c["bucket"], 0) + 1
         failed_names = sorted(name for name, c in checks.items() if c["bucket"] in FAILED)
         parts = [
-            ", ".join(f"{n} {b}" for b, n in sorted(counts.items()))
+            (", ".join(f"{n} {b}" for b, n in sorted(counts.items())) or "no checks")
             + (f" ({', '.join(failed_names)})" if failed_names else ""),
             f"required {sum(bucket(n) in ('pass', 'skipping') for n in self.required)}/{len(self.required)} green"
             if self.required
