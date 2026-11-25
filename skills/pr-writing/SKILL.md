@@ -59,6 +59,11 @@ matters.>
 - **Risk:** <Low | Medium | High>. <What breaks if this is wrong, and who notices.>
 - **Depends on:** <#123, or what must happen first>
 
+## Impact
+| | Before | After |
+| --- | --- | --- |
+| <What a user or operator would notice> | <3 queries, 200 ms> | <2 queries, 100 ms> |
+
 ## Why
 <What was wrong or missing, for whom, and how it showed up. Real numbers when
 there are any.>
@@ -82,9 +87,14 @@ there are any.>
 - **Risk** rates what a bug in this change could break, not how sure you are.
   Auth, payments, data, migrations, and security checks are High. Docs, tests,
   and isolated changes are Low.
+- **Impact** is only for a change that moves a number someone cares about:
+  time, requests, queries, cost, size, error rate. One row per number, both
+  sides in the same units. Add a graph or waterfall when it shows the change
+  better than the table. Mark any number you worked out from the code and
+  didn't measure. How you measured goes in Evidence.
 - Stack and history notes go in **Depends on** or Notes, not in Why.
-- If the repo has a PR template, put everything down to **Depends on** above
-  it, and fill in the template for the rest.
+- If the repo has a PR template, put In short and Impact above it, and fill in
+  the template for the rest.
 
 The first line tells the reviewer how much of a person is behind the change:
 
@@ -107,7 +117,7 @@ Show what you saw, in the form that fits the change:
 | --- | --- |
 | UI | The same element before and after, at the same viewport and crop. A phone width when layout is involved. A short video for motion or a multi-step flow. |
 | Bug fix, command, or build | The same input or command on both sides, with the exact output and exit code of each. The regression test, and whether it failed before the fix. |
-| Performance or cost | What you measured and how (machine, inputs, runs), both numbers, and how much they varied. |
+| Performance or cost | How you measured the Impact numbers (machine, inputs, runs), and how much they varied. |
 | AI or agent behavior | The same real prompts on both sides, how answers were graded, time and cost per answer, and where the grading is weak. |
 | New API or feature | The code someone would write to use it. |
 | Anything else | A small table or diagram comparing both versions. |
