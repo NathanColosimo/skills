@@ -1,4 +1,5 @@
 - Before filing, updating, or reviewing a PR, apply the `standards` skill. When writing a PR description or posting a PR comment, follow the `pr-writing` skill.
+- Clone a repo you only want to read, and start any throwaway project, in `~/code/tmp`. The top of `~/code` is for my own projects.
 
 ## How to respond
 
